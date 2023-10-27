@@ -1,0 +1,771 @@
+2016-12-14  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* config/arm/arm.c (TARGET_USE_BLOCKS_FOR_CONSTANT_P): Remove.
+	(arm_use_blocks_for_constant_p): Remove.
+
+2016-12-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+        * config/arm/arm-cores.def (cortex-m23): Add FL2_CMSE flag.
+	(cortex-m33): Likewise.
+
+2016-12-09  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-09  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	PR rtl-optimization/78255
+	* gcc/postreload.c (reload_cse_simplify): Do not CSE a function if
+	NO_FUNCTION_CSE is true.
+
+2016-12-09  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm-opts.h: Move struct arm_arch_core_flag and
+	arm_arch_core_flags to ...
+	* common/config/arm/arm-common.c: There.
+
+2016-12-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-12-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR rtl-optimization/78617
+	* lra-remat.c (do_remat): Initialize live_hard_regs from live in
+	registers, also setting hard registers mapped to pseudo registers.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	PR target/71607
+	* config/arm/arm.md (use_literal_pool): Removes.
+	(64-bit immediate split): No longer takes cost into consideration
+	if 'arm_disable_literal_pool' is enabled.
+	* config/arm/arm.c (arm_use_blocks_for_constant_p): New.
+	(TARGET_USE_BLOCKS_FOR_CONSTANT_P): Define.
+	(arm_max_const_double_inline_cost): Remove use of
+	arm_disable_literal_pool.
+	* config/arm/vfp.md (no_literal_pool_df_immediate): New.
+	(no_literal_pool_sf_immediate): New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* config/arm/arm.md (<mcrr>): New.
+	(<mrrc>): New.
+	* config/arm/arm.c (arm_arch5te): New.
+	(arm_option_override): Set arm_arch5te.
+	(arm_coproc_builtin_available): Add support for mcrr, mcrr2, mrrc
+	and mrrc2.
+	* config/arm/arm-builtins.c (MCRR_QUALIFIERS): Define to...
+	(arm_mcrr_qualifiers): ... this. New.
+	(MRRC_QUALIFIERS): Define to...
+	(arm_mrrc_qualifiers): ... this. New.
+	* config/arm/arm_acle.h (__arm_mcrr, __arm_mcrr2, __arm_mrrc,
+	__arm_mrrc2): New.
+	* config/arm/arm_acle_builtins.def (mcrr, mcrr2, mrrc, mrrc2): New.
+	* config/arm/iterators.md (MCRRI, mcrr, MCRR): New.
+	(MRRCI, mrrc, MRRC): New.
+	* config/arm/unspecs.md (VUNSPEC_MCRR, VUNSPEC_MCRR2, VUNSPEC_MRRC,
+	VUNSPEC_MRRC2): New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* config/arm/arm.md (<mcr>): New.
+	(<mrc>): New.
+	* config/arm/arm.c (arm_coproc_builtin_available): Add
+	support for mcr, mrc, mcr2 and mrc2.
+	* config/arm/arm-builtins.c (MCR_QUALIFIERS): Define to...
+	(arm_mcr_qualifiers): ... this. New.
+	(MRC_QUALIFIERS): Define to ...
+	(arm_mrc_qualifiers): ... this. New.
+	(MCR_QUALIFIERS): Define to ...
+	(arm_mcr_qualifiers): ... this. New.
+	* config/arm/arm_acle.h (__arm_mcr, __arm_mrc, __arm_mcr2,
+	__arm_mrc2): New.
+	* config/arm/arm_acle_builtins.def (mcr, mcr2, mrc, mrc2): New.
+	* config/arm/iterators.md (MCRI, mcr, MCR, MRCI, mrc, MRC): New.
+	* config/arm/unspecs.md (VUNSPEC_MCR, VUNSPEC_MCR2, VUNSPEC_MRC,
+	VUNSPEC_MRC2): New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* config/arm/arm.md (*ldcstc): New.
+	(<ldcstc>): New.
+	* config/arm/arm.c (arm_coproc_builtin_available): Add
+	support for ldc,ldcl,stc,stcl,ldc2,ldc2l,stc2 and stc2l.
+	(arm_coproc_ldc_stc_legitimate_address): New.
+	* config/arm/arm-builtins.c (arm_type_qualifiers): Add
+	'qualifier_const_pointer'.
+	(LDC_QUALIFIERS): Define to...
+	(arm_ldc_qualifiers): ... this. New.
+	(STC_QUALIFIERS): Define to...
+	(arm_stc_qualifiers): ... this. New.
+	* config/arm/arm-protos.h
+	(arm_coproc_ldc_stc_legitimate_address): New.
+	* config/arm/arm_acle.h (__arm_ldc, __arm_ldcl, __arm_stc,
+	__arm_stcl, __arm_ldc2, __arm_ldc2l, __arm_stc2, __arm_stc2l): New.
+	* config/arm/arm_acle_builtins.def (ldc, ldc2, ldcl, ldc2l, stc,
+	stc2, stcl, stc2l): New.
+	* config/arm/constraints.md (Uz): New.
+	* config/arm/iterators.md (LDCSTCI, ldcstc, LDCSTC): New.
+	* config/arm/unspecs.md (VUNSPEC_LDC, VUNSPEC_LDC2, VUNSPEC_LDCL,
+	VUNSPEC_LDC2L, VUNSPEC_STC, VUNSPEC_STC2, VUNSPEC_STCL,
+	VUNSPEC_STC2L): New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* config/arm/arm.md (<cdp>): New.
+	* config/arm/arm.c (neon_const_bounds): Rename this ...
+	(arm_const_bounds): ... this.
+	(arm_coproc_builtin_available): New.
+	* config/arm/arm-builtins.c (SIMD_MAX_BUILTIN_ARGS): Increase.
+	(arm_type_qualifiers): Add 'qualifier_unsigned_immediate'.
+	(CDP_QUALIFIERS): Define to...
+	(arm_cdp_qualifiers): ... this. New.
+	(void_UP): Define.
+	(arm_expand_builtin_args): Add case for 6 arguments.
+	* config/arm/arm-protos.h (neon_const_bounds): Rename this ...
+	(arm_const_bounds): ... this.
+	(arm_coproc_builtin_available): New.
+	* config/arm/arm_acle.h (__arm_cdp): New.
+	(__arm_cdp2): New.
+	* config/arm/arm_acle_builtins.def (cdp): New.
+	(cdp2): New.
+	* config/arm/iterators.md (CDPI,CDP,cdp): New.
+	* config/arm/neon.md: Rename all 'neon_const_bounds' to
+	'arm_const_bounds'.
+	* config/arm/types.md (coproc): New.
+	* config/arm/unspecs.md (VUNSPEC_CDP, VUNSPEC_CDP2): New.
+	* gcc/doc/extend.texi (ACLE): Add a mention of Coprocessor intrinsics.
+	* gcc/doc/sourcebuild.tex
+	(arm_coproc1_ok, arm_coproc2_ok, arm_coproc3_ok): New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* config/arm/arm-builtins.c (arm_unsigned_binop_qualifiers): New.
+	(UBINOP_QUALIFIERS): New.
+	(si_UP): Define.
+	(acle_builtin_data): New. Change comment.
+	(arm_builtins): Remove ARM_BUILTIN_CRC32B, ARM_BUILTIN_CRC32H,
+	ARM_BUILTIN_CRC32W, ARM_BUILTIN_CRC32CB, ARM_BUILTIN_CRC32CH,
+	ARM_BUILTIN_CRC32CW. Add ARM_BUILTIN_ACLE_BASE and include
+	arm_acle_builtins.def.
+	(ARM_BUILTIN_ACLE_PATTERN_START): Define.
+	(arm_init_acle_builtins): New.
+	(CRC32_BUILTIN): Remove.
+	(bdesc_2arg): Remove entries for crc32b, crc32h, crc32w,
+	crc32cb, crc32ch and crc32cw.
+	(arm_init_crc32_builtins): Remove.
+	(arm_init_builtins): Use arm_init_acle_builtins rather
+	than arm_init_crc32_builtins.
+	(arm_expand_acle_builtin): New.
+	(arm_expand_builtin): Use 'arm_expand_acle_builtin'.
+	(si_UP): New define.
+	* config/arm/arm_acle_builtins.def: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* config/arm/arm-builtins.c (neon_builtin_datum): Rename to ...
+	(arm_builtin_datum): ... this.
+	(arm_init_neon_builtin): Rename to ...
+	(arm_init_builtin): ... this. Add a new parameter PREFIX.
+	(NEON_MAX_BUILTIN_ARGS): Remove, it was unused.
+	(arm_init_neon_builtins): Replace 'arm_init_neon_builtin' with
+	'arm_init_builtin'. Replace type 'neon_builtin_datum' with
+	'arm_builtin_datum'.
+	(builtin_arg): Rename enum's replacing 'NEON_ARG' with
+	'ARG_BUILTIN' and add a 'ARG_BUILTIN_NEON_MEMORY.
+	(arm_expand_neon_args): Rename to ...
+	(arm_expand_builtin_args): ... this. Rename builtin_arg
+	enum values and differentiate between ARG_BUILTIN_MEMORY
+	and ARG_BUILTIN_NEON_MEMORY.
+	(arm_expand_neon_builtin_1): Rename to ...
+	(arm_expand_builtin_1): ... this. Rename builtin_arg enum
+	values, arm_expand_builtin_args.
+	(arm_expand_neon_builtin): Use arm_expand_builtin_1.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-09-23  Matthew Wahab  <matthew.wahab@arm.com>
+
+	 * config/arm/arm-builtins.c (arm_init_neon_builtin): New.
+	 (arm_init_builtins): Move body of a loop to the standalone
+	 function arm_init_neon_builtin.
+	 (arm_expand_neon_builtin_1): New.  Update comment.  Function body
+	 moved from arm_neon_builtin with some white-space fixes.
+	 (arm_expand_neon_builtin): Move code into the standalone function
+	 arm_expand_neon_builtin_1.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-01  Jeff Law  <law@redhat.com>
+
+	* config/arm/arm.c (arm_handle_cmse_nonsecure_call): Remove unused
+	variable main_variant.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* config/arm/arm-builtins.c (arm_builtins): Define
+	ARM_BUILTIN_CMSE_NONSECURE_CALLER.
+	(bdesc_2arg): Add line for cmse_nonsecure_caller.
+	(arm_init_builtins): Handle cmse_nonsecure_caller.
+	(arm_expand_builtin): Likewise.
+	* config/arm/arm_cmse.h (cmse_nonsecure_caller): New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* config/arm/arm.c (detect_cmse_nonsecure_call): New.
+	(cmse_nonsecure_call_clear_caller_saved): New.
+	(arm_reorg): Use cmse_nonsecure_call_clear_caller_saved.
+	(arm_function_ok_for_sibcall): Disable sibcalls for
+	cmse_nonsecure_call.
+	* config/arm/arm-protos.h (detect_cmse_nonsecure_call): New.
+	* config/arm/arm.md (call): Handle cmse_nonsecure_entry.
+	(call_value): Likewise.
+	(nonsecure_call_internal): New.
+	(nonsecure_call_value_internal): New.
+	* config/arm/thumb1.md (*nonsecure_call_reg_thumb1_v5): New.
+	(*nonsecure_call_value_reg_thumb1_v5): New.
+	* config/arm/thumb2.md (*nonsecure_call_reg_thumb2): New.
+	(*nonsecure_call_value_reg_thumb2): New.
+	* config/arm/unspecs.md (UNSPEC_NONSECURE_MEM): New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* config/arm/arm.c (gimplify.h): New include.
+	(arm_handle_cmse_nonsecure_call): New.
+	(arm_attribute_table): Added cmse_nonsecure_call.
+	(arm_comp_type_attributes): Deny compatibility of function types
+	with without the cmse_nonsecure_call attribute.
+	* doc/extend.texi (ARM ARMv8-M Security Extensions): New attribute.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* config/arm/arm.c (output_return_instruction): Clear
+	registers.
+	(thumb2_expand_return): Likewise.
+	(thumb1_expand_epilogue): Likewise.
+	(thumb_exit): Likewise.
+	(arm_expand_epilogue): Likewise.
+	(cmse_nonsecure_entry_clear_before_return): New.
+	(comp_not_to_clear_mask_str_un): New.
+	(compute_not_to_clear_mask): New.
+	* config/arm/thumb1.md (*epilogue_insns): Change length attribute.
+	* config/arm/thumb2.md (*thumb2_return): Disable for
+	cmse_nonsecure_entry functions.
+	(*thumb2_cmse_entry_return): Duplicate thumb2_return pattern for
+	cmse_nonsecure_entry functions.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* config/arm/arm.c (use_return_insn): Change to return with  bxns
+	when cmse_nonsecure_entry.
+	(output_return_instruction): Likewise.
+	(arm_output_function_prologue): Likewise.
+	(thumb_pop): Likewise.
+	(thumb_exit): Likewise.
+	(thumb2_expand_return): Assert that entry functions always have simple
+	returns.
+	(arm_expand_epilogue): Handle entry functions.
+	(arm_function_ok_for_sibcall): Disable sibcall for entry functions.
+	(arm_asm_declare_function_name): New.
+	* config/arm/arm-protos.h (arm_asm_declare_function_name): New.
+	* config/arm/elf.h (ASM_DECLARE_FUNCTION_NAME): Redefine to
+	use arm_asm_declare_function_name.
+
+2016-12-05  Andre Vieira        <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* config/arm/arm.c (arm_handle_cmse_nonsecure_entry): New.
+	(arm_attribute_table): Added cmse_nonsecure_entry
+	(arm_compute_func_type): Handle cmse_nonsecure_entry.
+	(cmse_func_args_or_return_in_stack): New.
+	(arm_handle_cmse_nonsecure_entry): New.
+	* config/arm/arm.h (ARM_FT_CMSE_ENTRY): New macro define.
+	(IS_CMSE_ENTRY): Likewise.
+	* doc/extend.texi (ARM ARMv8-M Security Extensions): New attribute.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* config.gcc (extra_headers): Added arm_cmse.h.
+	* config/arm/arm-arches.def (ARM_ARCH):
+	(armv8-m): Add FL2_CMSE.
+	(armv8-m.main): Likewise.
+	(armv8-m.main+dsp): Likewise.
+	* config/arm/arm-c.c
+	(arm_cpu_builtins): Added __ARM_FEATURE_CMSE macro.
+	* config/arm/arm-flags.h: Define FL2_CMSE.
+	* config/arm.c (arm_arch_cmse): New.
+	(arm_option_override): New error for unsupported cmse target.
+	* config/arm/arm.h (arm_arch_cmse): New.
+	* config/arm/arm.opt (mcmse): New.
+	* config/arm/arm_cmse.h: New file.
+	* doc/invoke.texi (ARM Options): Add -mcmse.
+	* doc/sourcebuild.texi (arm_cmse_ok): Add new effective target.
+	* doc/extend.texi: Add ARMv8-M Security Extensions entry.
+
+2016-12-01  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-30  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/t-rmprofile: Add mappings for Cortex-M23 and Cortex-M33.
+
+2016-11-22  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-22 Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config.gcc: Allow new rmprofile value for configure option
+	--with-multilib-list.
+	* config/arm/t-rmprofile: New file.
+	* doc/install.texi (--with-multilib-list): Document new rmprofile value
+	for ARM.
+
+2016-11-22  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-05-04  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config.gcc: Error out when conflicting multilib is detected.  Do not
+	loop over multilibs since no combination is legal.
+
+2016-11-22  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-22  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR target/77904
+	* config/arm/arm.c (thumb1_compute_save_reg_mask): Mark frame pointer
+	in save register mask if it is needed.
+
+2016-11-18  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-18  Terry Guo  <terry.guo@arm.com>
+		    Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* common/config/arm/arm-common.c (arm_target_thumb_only): New function.
+	* config/arm/arm-opts.h: Include arm-flags.h.
+	(struct arm_arch_core_flag): Define.
+	(arm_arch_core_flags): Define.
+	* config/arm/arm-protos.h: Include arm-flags.h
+	(FL_NONE, FL_ANY, FL_CO_PROC, FL_ARCH3M, FL_MODE26, FL_MODE32,
+	FL_ARCH4, FL_ARCH5, FL_THUMB, FL_LDSCHED, FL_STRONG, FL_ARCH5E,
+	FL_XSCALE, FL_ARCH6, FL_VFPV2, FL_WBUF, FL_ARCH6K, FL_THUMB2, FL_NOTM,
+	FL_THUMB_DIV, FL_VFPV3, FL_NEON, FL_ARCH7EM, FL_ARCH7, FL_ARM_DIV,
+	FL_ARCH8, FL_CRC32, FL_SMALLMUL, FL_NO_VOLATILE_CE, FL_IWMMXT,
+	FL_IWMMXT2, FL_ARCH6KZ, FL2_ARCH8_1, FL2_ARCH8_2, FL2_FP16INST,
+	FL_TUNE, FL_FOR_ARCH2, FL_FOR_ARCH3, FL_FOR_ARCH3M, FL_FOR_ARCH4,
+	FL_FOR_ARCH4T, FL_FOR_ARCH5, FL_FOR_ARCH5T, FL_FOR_ARCH5E,
+	FL_FOR_ARCH5TE, FL_FOR_ARCH5TEJ, FL_FOR_ARCH6, FL_FOR_ARCH6J,
+	FL_FOR_ARCH6K, FL_FOR_ARCH6Z, FL_FOR_ARCH6ZK, FL_FOR_ARCH6KZ,
+	FL_FOR_ARCH6T2, FL_FOR_ARCH6M, FL_FOR_ARCH7, FL_FOR_ARCH7A,
+	FL_FOR_ARCH7VE, FL_FOR_ARCH7R, FL_FOR_ARCH7M, FL_FOR_ARCH7EM,
+	FL_FOR_ARCH8A, FL2_FOR_ARCH8_1A, FL2_FOR_ARCH8_2A, FL_FOR_ARCH8M_BASE,
+	FL_FOR_ARCH8M_MAIN, arm_feature_set, ARM_FSET_MAKE,
+	ARM_FSET_MAKE_CPU1, ARM_FSET_MAKE_CPU2, ARM_FSET_CPU1, ARM_FSET_CPU2,
+	ARM_FSET_EMPTY, ARM_FSET_ANY, ARM_FSET_HAS_CPU1, ARM_FSET_HAS_CPU2,
+	ARM_FSET_HAS_CPU, ARM_FSET_ADD_CPU1, ARM_FSET_ADD_CPU2,
+	ARM_FSET_DEL_CPU1, ARM_FSET_DEL_CPU2, ARM_FSET_UNION, ARM_FSET_INTER,
+	ARM_FSET_XOR, ARM_FSET_EXCLUDE, ARM_FSET_IS_EMPTY,
+	ARM_FSET_CPU_SUBSET): Move to ...
+	* config/arm/arm-flags.h: This new file.
+	* config/arm/arm.h (TARGET_MODE_SPEC_FUNCTIONS): Define.
+	(EXTRA_SPEC_FUNCTIONS): Add TARGET_MODE_SPEC_FUNCTIONS to its value.
+	(TARGET_MODE_SPECS): Define.
+	(DRIVER_SELF_SPECS): Add TARGET_MODE_SPECS to its value.
+
+2016-11-18  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-18  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm-protos.h (FL_NONE, FL_ANY, FL_CO_PROC, FL_ARCH3M,
+	FL_MODE26, FL_MODE32, FL_ARCH4, FL_ARCH5, FL_THUMB, FL_LDSCHED,
+	FL_STRONG, FL_ARCH5E, FL_XSCALE, FL_ARCH6, FL_VFPV2, FL_WBUF,
+	FL_ARCH6K, FL_THUMB2, FL_NOTM, FL_THUMB_DIV, FL_VFPV3, FL_NEON,
+	FL_ARCH7EM, FL_ARCH7, FL_ARM_DIV, FL_ARCH8, FL_CRC32, FL_SMALLMUL,
+	FL_NO_VOLATILE_CE, FL_IWMMXT, FL_IWMMXT2, FL_ARCH6KZ, FL2_ARCH8_1,
+	FL2_ARCH8_2, FL2_FP16INST): Reindent comment, add final dot when
+	missing and make value unsigned.
+	(arm_feature_set): Use unsigned entries instead of unsigned long.
+
+2016-11-08  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-08  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR target/77933
+	* config/arm/arm.c (thumb1_expand_prologue): Distinguish between lr
+	being live in the function and lr needing to be saved.  Distinguish
+	between already saved pushable registers and registers to push.
+	Check for LR being an available pushable register.
+
+2016-11-17  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-16  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm.md (arm_addsi3): Add alternative for addition of
+	general register with general register or ARM constant into SP
+	register.
+
+2016-11-09  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-04  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm-arches.def (armv8-m.main+dsp): Set Cortex-M33 as
+	representative core for this architecture.
+	* config/arm/arm-cores.def (cortex-m33): Define new processor.
+	* config/arm/arm-tables.opt: Regenerate.
+	* config/arm/arm-tune.md: Likewise.
+	* config/arm/bpabi.h (BE8_LINK_SPEC): Add Cortex-M33 to the list of
+	valid -mcpu options.
+	* doc/invoke.texi (ARM Options): Document new Cortex-M33 processor.
+
+2016-11-09  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-04  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm-arches.def (armv8-m.base): Set Cortex-M23 as
+	representative core for this architecture.
+	* config/arm/arm-cores.def (cortex-m23): Define new processor.
+	* config/arm/arm-tables.opt: Regenerate.
+	* config/arm/arm-tune.md: Likewise.
+	* config/arm/arm.c (arm_v6m_tune): Add Cortex-M23 to the list of cores
+	this tuning parameters apply to in the comment.
+	* config/arm/bpabi.h (BE8_LINK_SPEC): Add Cortex-M23 to the list of
+	valid -mcpu options.
+	* doc/invoke.texi (ARM Options): Document new Cortex-M23 processor.
+
+2016-11-08  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-09-23  Uros Bizjak  <ubizjak@gmail.com>
+		    Jakub Jelinek  <jakub@redhat.com>
+
+	* hooks.h (hook_uint_uintp_false): Rename to...
+	(hook_bool_uint_uintp_false): ... this.
+	* hooks.c (hook_uint_uintp_false): Rename to...
+	(hook_bool_uint_uintp_false): ... this.
+	* target.def (elf_flags_numeric): Use hook_bool_uint_uintp_false
+	instead of hook_uint_uintp_false.
+
+	2016-09-23  Richard Biener  <rguenther@suse.de>
+
+	* hooks.h (hook_uint_uintp_false): Declare.
+
+	2016-09-22  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Terry Guo  <terry.guo@arm.com>
+
+	* target.def (elf_flags_numeric): New target hook.
+	* targhooks.h (default_asm_elf_flags_numeric): New.
+	* varasm.c (default_asm_elf_flags_numeric): New.
+	(default_elf_asm_named_section): Use new target hook.
+	* config/arm/arm.opt (mpure-code): New.
+	* config/arm/arm.h (SECTION_ARM_PURECODE): New.
+	* config/arm/arm.c (arm_asm_init_sections): Add section
+	attribute to default text section if -mpure-code.
+	(arm_option_check_internal): Diagnose use of option with
+	non supported targets and/or options.
+	(arm_asm_elf_flags_numeric): New.
+	(arm_function_section): New.
+	(arm_elf_section_type_flags): New.
+	* config/arm/elf.h (JUMP_TABLES_IN_TEXT_SECTION): Disable
+	for -mpure-code.
+	* gcc/doc/texi (TARGET_ASM_ELF_FLAGS_NUMERIC): New.
+	* gcc/doc/texi.in (TARGET_ASM_ELF_FLAGS_NUMERIC): Likewise.
+
+2016-11-08  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-05-27  Ulrich Weigand  <uweigand@de.ibm.com>
+
+	* configure.ac: Treat a --with-headers option without argument
+	the same as the default (i.e. consult sys-include directory).
+	* configure: Regenerate.
+
+2016-10-27  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-10-27  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm.h (TARGET_HAVE_LDREX): Define for ARMv8-M Baseline.
+	(TARGET_HAVE_LDREXBH): Likewise.
+	(TARGET_HAVE_LDACQ): Likewise.
+
+2016-10-27  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-10-27  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm.c (arm_split_atomic_op): Add function comment.  Add
+	logic to to decide whether to copy over old value to register for new
+	value.
+	* config/arm/sync.md: Add comments explaning why mode and code
+	attribute are not defined in iterators.md
+	(thumb1_atomic_op_str): New code attribute.
+	(thumb1_atomic_newop_str): Likewise.
+	(thumb1_atomic_fetch_op_str): Likewise.
+	(thumb1_atomic_fetch_newop_str): Likewise.
+	(thumb1_atomic_fetch_oldop_str): Likewise.
+	(atomic_exchange<mode>): Add new ARMv8-M Baseline only alternatives to
+	mirror the more restrictive constraints of the Thumb-1 insns after
+	split compared to Thumb-2 counterpart insns.
+	(atomic_<sync_optab><mode>): Likewise.  Add comment to keep constraints
+	in sync with non atomic version.
+	(atomic_nand<mode>): Likewise.
+	(atomic_fetch_<sync_optab><mode>): Likewise.
+	(atomic_fetch_nand<mode>): Likewise.
+	(atomic_<sync_optab>_fetch<mode>): Likewise.
+	(atomic_nand_fetch<mode>): Likewise.
+	* config/arm/thumb1.md (thumb1_addsi3): Add comment to keep contraint
+	in sync with atomic version.
+	(thumb1_subsi3_insn): Likewise.
+	(thumb1_andsi3_insn): Likewise.
+	(thumb1_iorsi3_insn): Likewise.
+	(thumb1_xorsi3_insn): Likewise.
+
+2016-10-26  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-10-26  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/sync.md (atomic_compare_and_swap<mode>_1): Add new ARMv8-M
+	Baseline only alternatives to (i) hold store atomic success value in a
+	return register rather than a scratch register, (ii) use a low register
+	for it and to (iii) ensure the cbranchsi insn generated by the split
+	respect the constraints of Thumb-1 cbranchsi4_insn and
+	cbranchsi4_scratch.
+	* config/arm/thumb1.md (cbranchsi4_insn): Add comment to indicate
+	constraints must match those in atomic_compare_and_swap.
+	(cbranchsi4_scratch): Likewise.
+
+2016-10-26  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-10-26  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm.c (arm_expand_compare_and_swap): Add new bdst local
+	variable.  Add the new parameter to the insn generator.  Set that
+	parameter to be CC flag for 32-bit targets, bval otherwise.  Set the
+	return value from the negation of that parameter for Thumb-1, keeping
+	the logic unchanged otherwise except for using bdst as the destination
+	register of the compare_and_swap insn.
+	(arm_split_compare_and_swap): Add explanation about how is the value
+	returned to the function comment.  Rename scratch variable to
+	neg_bval.  Adapt initialization of variables holding operands to the
+	new operand numbers.  Use return register to hold result of store
+	exclusive for Thumb-1, scratch register otherwise.  Construct the
+	appropriate cbranch for Thumb-1 targets, keeping the logic unchanged
+	for 32-bit targets.  Guard Z flag setting to restrict to 32bit targets.
+	Use gen_cbranchsi4 rather than hand-written conditional branch to loop
+	for strongly ordered compare_and_swap.
+	* config/arm/predicates.md (cc_register_operand): New predicate.
+	* config/arm/sync.md (atomic_compare_and_swap<mode>_1): Use a
+	match_operand with the new predicate to accept either the CC flag or a
+	destination register for the boolean return value, restricting it to
+	CC flag only via constraint.  Adapt operand numbers accordingly.
+
+2016-10-26  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-10-25  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/constraints.md (Q constraint): Document its use for
+	Thumb-1.
+	(Pf constraint): New constraint for relaxed, consume or relaxed memory
+	models.
+	* config/arm/sync.md (atomic_load<mode>): Add new ARMv8-M Baseline only
+	alternatives to allow any register when memory model matches Pf and
+	thus lda is used, but only low registers otherwise.  Use unpredicated
+	output template for Thumb-1 targets.
+	(atomic_store<mode>): Likewise for stl.
+	(arm_load_exclusive<mode>): Add new ARMv8-M Baseline only alternative
+	whose output template does not have predication.
+	(arm_load_acquire_exclusive<mode>): Likewise.
+	(arm_load_exclusivesi): Likewise.
+	(arm_load_acquire_exclusivesi): Likewise.
+	(arm_store_release_exclusive<mode>): Likewise.
+	(arm_store_exclusive<mode>): Use unpredicated output template for
+	Thumb-1 targets.
+
+2016-10-25  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-09-26  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* tree.h (memmodel_from_int, memmodel_base, is_mm_relaxed,
+	is_mm_consume, is_mm_acquire, is_mm_release, is_mm_acq_rel,
+	is_mm_seq_cst, is_mm_sync): Move to ...
+	* memmodel.h: This.  New file.
+	* builtins.c: Include memmodel.h.
+	* optabs.c: Likewise.
+	* tsan.c: Likewise.
+	* config/aarch64/aarch64.c: Likewise.
+	* config/alpha/alpha.c: Likewise.
+	* config/arm/arm.c: Likewise.
+	* config/i386/i386.c: Likewise.
+	* config/ia64/ia64.c: Likewise.
+	* config/mips/mips.c: Likewise.
+	* config/rs6000/rs6000.c: Likewise.
+	* config/sparc/sparc.c: Likewise.
+	* genconditions.c: Include memmodel.h in generated file.
+	* genemit.c: Likewise.
+	* genoutput.c: Likewise.
+	* genpeep.c: Likewise.
+	* genpreds.c: Likewise.
+	* genrecog.c: Likewise.
+
+2016-09-01  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-14  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm.h (TARGET_HAVE_LDACQ): Enable for ARMv8-M Mainline.
+	(TARGET_HAVE_LDACQD): New macro.
+	* config/arm/sync.md (atomic_loaddi): Use TARGET_HAVE_LDACQD rather
+	than TARGET_HAVE_LDACQ.
+	(arm_load_acquire_exclusivedi): Likewise.
+	(arm_store_release_exclusivedi): Likewise.
+
+2016-07-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm.h (TARGET_HAVE_CBZ): Define.
+	(TARGET_IDIV): Set for all Thumb targets provided they have hardware
+	divide feature.
+	* config/arm/arm.md (divsi3): New unpredicable alternative for ARMv8-M
+	Baseline.  Make initial alternative TARGET_32BIT only.
+	(udivsi3): Likewise.
+	* config/arm/thumb1.md (thumb1_cbz): New define_insn.
+	* doc/sourcebuild.texi (arm_thumb1_cbz_ok): Document new effective
+	target.
+
+2016-07-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm.h (TARGET_HAVE_MOVT): Include ARMv8-M as having MOVT.
+	* config/arm/arm.c (arm_arch_name): (const_ok_for_op): Check MOVT/MOVW
+	availability with TARGET_HAVE_MOVT.
+	(thumb_legitimate_constant_p): Strip the high part of a label_ref.
+	(thumb1_rtx_costs): Also return 0 if setting a half word constant and
+	MOVW is available and replace (unsigned HOST_WIDE_INT) INTVAL by
+	UINTVAL.
+	(thumb1_size_rtx_costs): Make set of half word constant also cost 1
+	extra instruction if MOVW is available.  Use a cost variable
+	incremented by COSTS_N_INSNS (1) when the condition match rather than
+	returning an arithmetic expression based on COSTS_N_INSNS.  Make
+	constant with bottom half word zero cost 2 instruction if MOVW is
+	available.
+	* config/arm/arm.md (define_attr "arch"): Add v8mb.
+	(define_attr "arch_enabled"): Set to yes if arch value is v8mb and
+	target is ARMv8-M Baseline.
+	(arm_movt): New unpredicable alternative for ARMv8-M Baseline.
+	(arm_movtas_ze): Likewise.
+	* config/arm/thumb1.md (thumb1_movdi_insn): Add ARMv8-M Baseline only
+	alternative for constants satisfying j constraint.
+	(thumb1_movsi_insn): Likewise.
+	(movsi splitter for K alternative): Tighten condition to not trigger
+	if movt is available and j constraint is satisfied.
+	(Pe immediate splitter): Likewise.
+	(thumb1_movhi_insn): Add ARMv8-M Baseline only alternative for
+	constant fitting in an halfword to use MOVW.
+	* doc/sourcebuild.texi (arm_thumb1_movt_ok): Document new ARM
+	effective target.
+
+2016-07-11  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm.h (TARGET_USE_MOVT): Check MOVT/MOVW availability
+	with TARGET_HAVE_MOVT.
+	(TARGET_HAVE_MOVT): Define.
+	* config/arm/arm.c (const_ok_for_op): Check MOVT/MOVW
+	availability with TARGET_HAVE_MOVT.
+	* config/arm/arm.md (arm_movt): Use TARGET_HAVE_MOVT to check MOVT
+	availability.
+	(addsi splitter): Use TARGET_THUMB && TARGET_HAVE_MOVT rather than
+	TARGET_THUMB2.
+	(symbol_refs movsi splitter): Remove TARGET_32BIT check.
+	(arm_movtas_ze): Use TARGET_HAVE_MOVT to check MOVT availability.
+	* config/arm/constraints.md (define_constraint "j"): Use
+	TARGET_HAVE_MOVT to check MOVT availability.
+
+2016-07-11  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm-protos.h: Reindent FL_FOR_* macro definitions.
+
+2016-07-11  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/arm-arches.def (armv8-m.base): Define new architecture.
+	(armv8-m.main): Likewise.
+	(armv8-m.main+dsp): Likewise.
+	* config/arm/arm-protos.h (FL_FOR_ARCH8M_BASE): Define.
+	(FL_FOR_ARCH8M_MAIN): Likewise.
+	* config/arm/arm-tables.opt: Regenerate.
+	* config/arm/bpabi.h: Add armv8-m.base, armv8-m.main and
+	armv8-m.main+dsp to BE8_LINK_SPEC.
+	* config/arm/arm.h (TARGET_HAVE_LDACQ): Exclude ARMv8-M.
+	(enum base_architecture): Add BASE_ARCH_8M_BASE and BASE_ARCH_8M_MAIN.
+	* config/arm/arm.c (arm_arch_name): Increase size to work with ARMv8-M
+	Baseline and Mainline.
+	(arm_option_override_internal): Also disable arm_restrict_it when
+	!arm_arch_notm.  Update comment for -munaligned-access to also cover
+	ARMv8-M Baseline.
+	(arm_file_start): Increase buffer size for printing architecture name.
+	* doc/invoke.texi: Document architectures armv8-m.base, armv8-m.main
+	and armv8-m.main+dsp.
+	(mno-unaligned-access): Clarify that this is disabled by default for
+	ARMv8-M Baseline architectures as well.
+
+2016-07-11  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* config/arm/elf.h: Use __ARM_ARCH_ISA_THUMB and __ARM_ARCH_ISA_ARM to
+	decide whether to prevent some libgcc routines being included for some
+	multilibs rather than __ARM_ARCH_6M__ and add comment to indicate the
+	link between this condition and the one in
+	libgcc/config/arm/lib1func.S.

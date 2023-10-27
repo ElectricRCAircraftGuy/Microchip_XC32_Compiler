@@ -1,0 +1,6 @@
+2016-10-25  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-09-26  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* c-common.c: Include memmodel.h.

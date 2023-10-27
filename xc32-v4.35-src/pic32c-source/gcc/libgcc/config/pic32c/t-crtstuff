@@ -1,0 +1,2 @@
+# Disable TM_CLONE_REGISTRY which is default for ELF.
+CRTSTUFF_T_CFLAGS = -DUSE_TM_CLONE_REGISTRY=0

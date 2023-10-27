@@ -1,0 +1,207 @@
+; Options for the PIC32C port of the compiler.
+
+; Copyright (C) 2005-2015 Free Software Foundation, Inc.
+;
+; This file is part of GCC.
+;
+; GCC is free software; you can redistribute it and/or modify it under
+; the terms of the GNU General Public License as published by the Free
+; Software Foundation; either version 3, or (at your option) any later
+; version.
+;
+; GCC is distributed in the hope that it will be useful, but WITHOUT ANY
+; WARRANTY; without even the implied warranty of MERCHANTABILITY or
+; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+; for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with GCC; see the file COPYING3.  If not see
+; <http://www.gnu.org/licenses/>.
+
+
+
+mprocessor=
+Target Report RejectNegative Joined Var(mchp_processor_string) Init(0)
+-mprocessor=PROCESSOR	Specify the target PIC32 PROCESSOR
+
+mconfig-data-file=
+Target Report RejectNegative Joined Var(mchp_config_data_file) Undocumented
+
+Waddress-attribute-use
+Warning C C++ Report Var(mchp_warn_address_attribute_use) Init(0)
+Warn about all uses of the address() attribute. For engineering-support purposes only, identify variables and functions that are address() attributed
+
+
+mprint-builtins
+Target RejectNegative Var(TARGET_PRINT_BUILTINS)
+-mprint-builtins	Print a list of enabled builtin functions
+
+mprint-protos
+Target RejectNegative Var(TARGET_WRITE_BUILTINS_H) Undocumented
+-mprint-protos  write a builtins.h file containing prototypes for all builtins
+
+
+mlicense-warning
+Target Var Var(TARGET_LICENSE_WARNING) Undocumented Init(1)
+-mlicense-warning	Emit the license warning when appropriate
+
+
+mno-fallback
+Target Report RejectNegative Var Var(TARGET_NO_FALLBACKLICENSE)
+--nofallback		Require a MPLAB XC32 Standard or Pro license and do not fall back to a lesser license
+
+
+mskip-license-check
+Target Var(TARGET_SKIP_LICENSE_CHECK) Init(0) Undocumented
+For use by MPLAB X IDE only - Forces a free license
+
+
+mtext=
+Target Report RejectNegative Joined Var(mchp_text_scn) Init(NULL) Undocumented 
+-mtext=NAME	Name the text section NAME (default .text)
+
+
+mprint-mchp-search-dirs
+Target RejectNegative Var(TARGET_PRINT_MCHP_SEARCH_DIRS) Init(0) Undocumented
+-mprint-mchp-search-dirs	Print to stdout a list of include-file search directories
+
+msmart-io=
+Target Var RejectNegative Joined UInteger Var(TARGET_MCHP_SMARTIO) Init(1)
+-msmart-io=LEVEL	Enable smart-IO library call forwarding level LEVEL [0,2]
+
+msmart-io
+Target RejectNegative Alias(msmart-io=, 1)
+
+mno-smart-io
+Target RejectNegative Alias(msmart-io=, 0)
+
+mtcm=
+Target Report RejectNegative Joined Var(TARGET_MCHP_TCM) Undocumented
+-mtcm=VALUE	Enable tcm and set tcm size to VALUE for CMCC-style TCM
+
+mtcm
+Target RejectNegative Undocumented
+-mtcm           Enable tcm and set tcm size to device default.
+
+mitcm=
+Target Report RejectNegative Joined Var(TARGET_MCHP_ITCM)
+-mitcm=VALUE	Enable itcm and set itcm size to VALUE for devices with separate itcm & dtcm sizes
+
+mitcm
+Target RejectNegative Undocumented
+-mitcm          Enable itcm and set itcm size to device default.
+
+mdtcm=
+Target Report RejectNegative Joined Var(TARGET_MCHP_DTCM)
+-mdtcm=VALUE	Enable dtcm and set dtcm size to VALUE for devices with separate itcm & dtcm sizes
+
+mdtcm
+Target RejectNegative Undocumented
+-mdtcm          Enable dtcm and set dtcm size to device default.
+
+mstack-in-tcm
+Target Report Var(mchp_stack_in_tcm)
+-mstack-in-tcm Move stack from ram to dtcm 
+
+mvectors-in-tcm
+Target Report Var(mchp_vectors_in_tcm) Init(1) Undocumented
+-m(no-)vectors-in-tcm	(Do not) Move vectors to tcm/itcm region 
+
+msoft-float
+Target Alias(mfloat-abi=, soft)
+-msoft-float	Alias for -mfloat-abi=soft
+
+mhard-float
+Target Alias(mfloat-abi=, hard)
+-mhard-float	Alias for -mfloat-abi=hard
+
+mdebugger
+Target RejectNegative Var(TARGET_MCHP_DEBUGGER) Init(0) Undocumented
+-mdebugger      For use by MPLAB X IDE only
+
+mno-device-startup-code
+Target RejectNegative
+-mno-device-startup-code	Do not link the default device-specific startup code
+
+mnewlib-nano
+Target Report Init(1)
+-mnewlib-nano   Use newlib-nano implementation of standard C library
+
+mnewlib-libc
+Target RejectNegative Var(TARGET_NEWLIB_LIBC) Undocumented
+Accepted for compatibility reasons
+
+msemihost
+Target RejectNegative VAR(TARGET_SEMIHOSTING) Init(0) Undocumented
+-msemihost      Use rdimon semihosting
+
+mdbg=
+Target Joined RejectNegative Var(mchp_deferred_debug) Defer Condition(_BUILD_MCHP_DEVEL_)
+-mdbg=[all|flag1,flag2,...]          Enable internal debug flags
+
+mafrlcsj
+Target RejectNegative Var(mchp_mafrlcsj) Undocumented
+
+mdfp=
+Target Report RejectNegative Joined Var(mchp_pic32c_dfp_path) Init(0)
+-mdfp=DFP_PATH	Specify the PIC32C DFP path
+
+minclude-legacy-headers
+Target RejectNegative
+-minclude-legacy-headers	Include legacy device headers, not MCC ones which are default for XC32.
+
+mallow-partial-config-words
+Target Var(mchp_allow_partial_config_words) Init(0)
+Allow (or disallow) config words to be partially specified using #pragma config directives.
+
+mcodecov=
+Target Report JoinedOrMissing RejectNegative ToLower Var(mchp_codecov) Init()
+-mcodecov=[sb]     Enable code coverage instrumentation
+
+mcodecov
+Target RejectNegative Alias(mcodecov=,)
+
+mcodecov-sb
+Target RejectNegative Alias(mcodecov=,sb) Undocumented
+
+mcci
+Target RejectNegative Var(TARGET_CCI)
+-mcci   Use CCI keywords
+
+mpa
+Target Mask(PROCEDURAL_ABSTRACTION) Undocumented
+Enable procedural abstraction optimization.
+
+mno-pa-on-file=
+Target RejectNegative Joined MissingArgError(missing object or archive filename to be ignored for PA) Undocumented
+Ignore procedural abstraction optimization on specified object or archive file
+
+mno-pa-on-function=
+Target RejectNegative Joined MissingArgError(missing function name to be ignored for PA) Undocumented
+Ignore procedural abstraction optimization on specified function
+
+mremove-unnecessary-sets
+Target Var(mchp_remove_unnecessary_sets) Init(1)
+Performs an extra opt pass to remove the unnecessary set/move insns introduced by the split2 opt pass.
+
+mchp-stack-usage
+Target RejectNegative Var(mchp_stack_usage) Init(0)
+-mchp-stack-usage     Enable Microchip-specific stack usage reporting
+
+mopt-imm-offset
+Target Var(opt_imm_offset) Init(0)
+Reduce the immediate offset value for load / store instructions that use the [areg, #imm_offset] addressing mode
+
+mauto-indexing
+Common Report Var(flag_auto_indexing) Init(1) Optimization
+Generate auto-inc/dec instructions.
+
+madj-exiting-edge-prob
+Common Report Var(flag_exiting_edge_prob) Init(2) Optimization
+Adjust the probability of loop exiting edges
+;
+
+mloop-rename-registers
+Common Report Var(flag_loop_rename_registers) Init(2) Optimization
+Perform register renaming on loops
+;

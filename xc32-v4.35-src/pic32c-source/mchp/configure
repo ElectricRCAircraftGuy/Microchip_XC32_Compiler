@@ -1,0 +1,60 @@
+#!/bin/bash
+
+readonly progname="${BASH_SOURCE[0]##*/}"
+readonly sourcedir="$(cd -P "$(dirname "$(command -v "${BASH_SOURCE[0]}")")" && pwd -P)"
+
+print_help () {
+    cat <<EOF
+Usage: ${progname} --help
+       ${progname} <args>
+
+Configure libmchp.
+
+Arguments:
+   -h | -help | --help        this help message
+   --installdir               where to install the headers and libraries
+   --smart-io-suffixdir       location of suffix files for smart-io
+
+EOF
+}
+
+declare arg_installdir="$(pwd)"
+declare arg_smart_io_suffixdir="$(pwd)"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --help | -h | -help )
+            print_help
+            exit 0
+            ;;
+        --installdir )
+            shift
+            arg_installdir=$1
+            ;;
+        --installdir=* )
+            arg_installdir=${1#*=}
+            ;;
+        --smart-io-suffixdir )
+            arg_smart_io_suffixdir=$1
+            shift
+            ;;
+        --smart-io-suffixdir=* )
+            arg_smart_io_suffixdir=${1#*=}
+            ;;
+        * )
+            printf 'Error: Unknown option: %s\n' "$1" >&2
+            exit 1
+            ;;
+    esac
+
+    shift
+done
+
+installdir=${arg_installdir}
+suffixdir=${arg_smart_io_suffixdir}
+
+cat >config.mk <<EOF
+SOURCEDIR = ${sourcedir}
+INSTALLDIR = ${installdir}
+SUFFIXDIR = ${suffixdir}
+EOF

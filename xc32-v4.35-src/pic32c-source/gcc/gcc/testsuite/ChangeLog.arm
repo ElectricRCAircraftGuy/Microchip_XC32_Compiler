@@ -1,0 +1,359 @@
+2016-12-14  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* gcc.target/arm/thumb2-slow-flash-data-3.c: Add extra scan.
+	* gcc.target/arm/thumb2-slow-flash-data-5.c: Likewise.
+
+2016-12-14  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* gcc.target/arm/cmse/mainline/hard/cmse-13.c: Fix testsuite.
+	* gcc.target/arm/cmse/mainline/hard/cmse-7.c: Likewise.
+	* gcc.target/arm/cmse/mainline/hard/cmse-8.c: Likewise.
+	* gcc.target/arm/cmse/mainline/hard-sp/cmse-13.c: Likewise.
+	* gcc.target/arm/cmse/mainline/hard-sp/cmse-7.c: Likewise.
+	* gcc.target/arm/cmse/mainline/hard-sp/cmse-8.c: Likewise.
+
+2016-12-09  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-09  Andre Vieira <andre.simoesdiasvieira@arm.com>
+
+	PR rtl-optimization/78255
+	* gcc.target/aarch64/pr78255.c: New.
+	* gcc.target/arm/pr78255-1.c: New.
+	* gcc.target/arm/pr78255-2.c: New.
+
+2016-12-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-12-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR rtl-optimization/78617
+	* gcc.c-torture/execute/pr78617.c: New test.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+	    Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR target/71607
+	* gcc.target/arm/thumb2-slow-flash-data.c: Renamed to ...
+	* gcc.target/arm/thumb2-slow-flash-data-1.c: ... this.
+	* gcc.target/arm/thumb2-slow-flash-data-2.c: New.
+	* gcc.target/arm/thumb2-slow-flash-data-3.c: New.
+	* gcc.target/arm/thumb2-slow-flash-data-4.c: New.
+	* gcc.target/arm/thumb2-slow-flash-data-5.c: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* gcc.target/arm/acle/mcrr: New.
+	* gcc.target/arm/acle/mcrr2: New.
+	* gcc.target/arm/acle/mrrc: New.
+	* gcc.target/arm/acle/mrrc2: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* gcc.target/arm/acle/mcr.c: New.
+	* gcc.target/arm/acle/mrc.c: New.
+	* gcc.target/arm/acle/mcr2.c: New.
+	* gcc.target/arm/acle/mrc2.c: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* gcc.target/arm/acle/ldc: New.
+	* gcc.target/arm/acle/ldc2: New.
+	* gcc.target/arm/acle/ldcl: New.
+	* gcc.target/arm/acle/ldc2l: New.
+	* gcc.target/arm/acle/stc: New.
+	* gcc.target/arm/acle/stc2: New.
+	* gcc.target/arm/acle/stcl: New.
+	* gcc.target/arm/acle/stc2l: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* gcc.target/arm/acle/acle.exp: Run tests for different options
+	and make sure fat-lto-objects is used such that we can still do
+	assemble scans.
+	* gcc.target/arm/acle/cdp.c: New.
+	* gcc.target/arm/acle/cdp2.c: New.
+	* lib/target-supports.exp (check_effective_target_arm_coproc1_ok): New.
+	(check_effective_target_arm_coproc1_ok_nocache): New.
+	(check_effective_target_arm_coproc2_ok): New.
+	(check_effective_target_arm_coproc2_ok_nocache): New.
+	(check_effective_target_arm_coproc3_ok): New.
+	(check_effective_target_arm_coproc3_ok_nocache): New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/cmse/cmse-1.c: Add test for
+	cmse_nonsecure_caller.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/cmse/cmse.exp: Run tests in mainline dir.
+	* gcc.target/arm/cmse/cmse-9.c: Added some extra tests.
+	* gcc.target/arm/cmse/cmse-14.c: New.
+	* gcc.target/arm/cmse/baseline/bitfield-4.c: New.
+	* gcc.target/arm/cmse/baseline/bitfield-5.c: New.
+	* gcc.target/arm/cmse/baseline/bitfield-6.c: New.
+	* gcc.target/arm/cmse/baseline/bitfield-7.c: New.
+	* gcc.target/arm/cmse/baseline/bitfield-8.c: New.
+	* gcc.target/arm/cmse/baseline/bitfield-9.c: New.
+	* gcc.target/arm/cmse/baseline/bitfield-and-union-1.c: New.
+	* gcc.target/arm/cmse/baseline/cmse-11.c: New.
+	* gcc.target/arm/cmse/baseline/cmse-13.c: New.
+	* gcc.target/arm/cmse/baseline/cmse-6.c: New.
+	* gcc.target/arm/cmse/baseline/union-1.c: New.
+	* gcc.target/arm/cmse/baseline/union-2.c: New.
+	* gcc.target/arm/cmse/mainline/bitfield-4.c: New.
+	* gcc.target/arm/cmse/mainline/bitfield-5.c: New.
+	* gcc.target/arm/cmse/mainline/bitfield-6.c: New.
+	* gcc.target/arm/cmse/mainline/bitfield-7.c: New.
+	* gcc.target/arm/cmse/mainline/bitfield-8.c: New.
+	* gcc.target/arm/cmse/mainline/bitfield-9.c: New.
+	* gcc.target/arm/cmse/mainline/bitfield-and-union-1.c: New.
+	* gcc.target/arm/cmse/mainline/union-1.c: New.
+	* gcc.target/arm/cmse/mainline/union-2.c: New.
+	* gcc.target/arm/cmse/mainline/hard-sp/cmse-13.c: New.
+	* gcc.target/arm/cmse/mainline/hard-sp/cmse-7.c: New.
+	* gcc.target/arm/cmse/mainline/hard-sp/cmse-8.c: New.
+	* gcc.target/arm/cmse/mainline/hard/cmse-13.c: New.
+	* gcc.target/arm/cmse/mainline/hard/cmse-7.c: New.
+	* gcc.target/arm/cmse/mainline/hard/cmse-8.c: New.
+	* gcc.target/arm/cmse/mainline/soft/cmse-13.c: New.
+	* gcc.target/arm/cmse/mainline/soft/cmse-7.c: New.
+	* gcc.target/arm/cmse/mainline/soft/cmse-8.c: New.
+	* gcc.target/arm/cmse/mainline/softfp-sp/cmse-7.c: New.
+	* gcc.target/arm/cmse/mainline/softfp-sp/cmse-8.c: New.
+	* gcc.target/arm/cmse/mainline/softfp/cmse-13.c: New.
+	* gcc.target/arm/cmse/mainline/softfp/cmse-7.c: New.
+	* gcc.target/arm/cmse/mainline/softfp/cmse-8.c: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/cmse/cmse-3.c: Add tests.
+	* gcc.target/arm/cmse/cmse-4.c: Add tests.
+	* gcc.target/arm/cmse/cmse-15.c: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/cmse/cmse.exp: Test different multilibs separate.
+	* gcc.target/arm/cmse/struct-1.c: New.
+	* gcc.target/arm/cmse/bitfield-1.c: New.
+	* gcc.target/arm/cmse/bitfield-2.c: New.
+	* gcc.target/arm/cmse/bitfield-3.c: New.
+	* gcc.target/arm/cmse/baseline/cmse-2.c: New.
+	* gcc.target/arm/cmse/baseline/softfp.c: New.
+	* gcc.target/arm/cmse/mainline/soft/cmse-5.c: New.
+	* gcc.target/arm/cmse/mainline/hard/cmse-5.c: New.
+	* gcc.target/arm/cmse/mainline/hard-sp/cmse-5.c: New.
+	* gcc.target/arm/cmse/mainline/softfp/cmse-5.c: New.
+	* gcc.target/arm/cmse/mainline/softfp-sp/cmse-5.c: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/cmse/cmse-4.c: New.
+	* gcc.target/arm/cmse/cmse-9.c: New.
+	* gcc.target/arm/cmse/cmse-10.c: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/cmse/cmse-3.c: New.
+
+2016-12-05  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-12-02  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Thomas Preud'homme	<thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/cmse/cmse.exp: New.
+	* gcc.target/arm/cmse/cmse-1.c: New.
+	* gcc.target/arm/cmse/cmse-12.c: New.
+	* lib/target-supports.exp
+	(check_effective_target_arm_cmse_ok): New.
+
+2016-12-01  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-30  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* lib/target-supports.exp (add_options_for_arm_arch_v6m): Add
+	-mfloat-abi=soft option.
+	(add_options_for_arm_arch_v8m_base): Likewise.  Reindent containing
+	foreach loop.
+
+2016-11-22  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-22  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR target/77904
+	* gcc.target/arm/pr77904.c: New test.
+
+2016-11-21  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport to mainline
+	2016-11-21  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/empty_fiq_handler.c: Skip if -mthumb is passed in and
+	target is Thumb-only.
+
+2016-11-18  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-18  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/optional_thumb-1.c: New test.
+	* gcc.target/arm/optional_thumb-2.c: New test.
+	* gcc.target/arm/optional_thumb-3.c: New test.
+
+2016-11-08  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-08  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	PR target/77933
+	* gcc.target/arm/pr77933-1.c: New test.
+	* gcc.target/arm/pr77933-2.c: Likewise.
+
+2016-11-17  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-11-16  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/empty_fiq_handler.c: New test.
+
+2016-11-08  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	Backport from mainline
+	2016-10-21  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+
+	* gcc.target/arm/pure-code/pure-code.exp: Require arm_cortex_m
+	effective target.
+
+	2016-09-22  Andre Vieira  <andre.simoesdiasvieira@arm.com>
+		    Terry Guo  <terry.guo@arm.com>
+
+	* gcc.target/arm/pure-code/ffunction-sections.c: New.
+	* gcc.target/arm/pure-code/no-literal-pool.c: New.
+	* gcc.target/arm/pure-code/pure-code.exp: New.
+
+2016-10-27  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-10-27  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/atomic-comp-swap-release-acquire-3.c: New test.
+	* gcc.target/arm/atomic-op-acq_rel-3.c: Likewise.
+	* gcc.target/arm/atomic-op-acquire-3.c: Likewise.
+	* gcc.target/arm/atomic-op-char-3.c: Likewise.
+	* gcc.target/arm/atomic-op-consume-3.c: Likewise.
+	* gcc.target/arm/atomic-op-int-3.c: Likewise.
+	* gcc.target/arm/atomic-op-relaxed-3.c: Likewise.
+	* gcc.target/arm/atomic-op-release-3.c: Likewise.
+	* gcc.target/arm/atomic-op-seq_cst-3.c: Likewise.
+	* gcc.target/arm/atomic-op-short-3.c: Likewise.
+
+2016-09-01  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-14  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* gcc.target/arm/atomic-comp-swap-release-acquire.c: Rename into ...
+	* gcc.target/arm/atomic-comp-swap-release-acquire-1.c: This.
+	* gcc.target/arm/atomic-op-acq_rel.c: Rename into ...
+	* gcc.target/arm/atomic-op-acq_rel-1.c: This.
+	* gcc.target/arm/atomic-op-acquire.c: Rename into ...
+	* gcc.target/arm/atomic-op-acquire-1.c: This.
+	* gcc.target/arm/atomic-op-char.c: Rename into ...
+	* gcc.target/arm/atomic-op-char-1.c: This.
+	* gcc.target/arm/atomic-op-consume.c: Rename into ...
+	* gcc.target/arm/atomic-op-consume-1.c: This.
+	* gcc.target/arm/atomic-op-int.c: Rename into ...
+	* gcc.target/arm/atomic-op-int-1.c: This.
+	* gcc.target/arm/atomic-op-relaxed.c: Rename into ...
+	* gcc.target/arm/atomic-op-relaxed-1.c: This.
+	* gcc.target/arm/atomic-op-release.c: Rename into ...
+	* gcc.target/arm/atomic-op-release-1.c: This.
+	* gcc.target/arm/atomic-op-seq_cst.c: Rename into ...
+	* gcc.target/arm/atomic-op-seq_cst-1.c: This.
+	* gcc.target/arm/atomic-op-short.c: Rename into ...
+	* gcc.target/arm/atomic-op-short-1.c: This.
+	* gcc.target/arm/atomic-comp-swap-release-acquire-2.c: New test.
+	* gcc.target/arm/atomic-op-acq_rel-2.c: Likewise.
+	* gcc.target/arm/atomic-op-acquire-2.c: Likewise.
+	* gcc.target/arm/atomic-op-char-2.c: Likewise.
+	* gcc.target/arm/atomic-op-consume-2.c: Likewise.
+	* gcc.target/arm/atomic-op-int-2.c: Likewise.
+	* gcc.target/arm/atomic-op-relaxed-2.c: Likewise.
+	* gcc.target/arm/atomic-op-release-2.c: Likewise.
+	* gcc.target/arm/atomic-op-seq_cst-2.c: Likewise.
+	* gcc.target/arm/atomic-op-short-2.c: Likewise.
+
+2016-07-14  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-14  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+        * gcc.target/arm/pr42574.c: Add missing target keyword for the dg-do
+        selector and enclose boolean expression in curly braces.
+
+2016-07-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* lib/target-supports.exp (check_effective_target_arm_thumb1_cbz_ok):
+	Add new arm_thumb1_cbz_ok effective target.
+	* gcc.target/arm/cbz.c: New test.
+
+2016-07-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* lib/target-supports.exp (check_effective_target_arm_thumb1_movt_ok):
+	Define effective target.
+	* gcc.target/arm/pr42574.c: Require arm_thumb1_ok and
+	!arm_thumb1_movt_ok to exclude ARMv8-M Baseline.
+	* gcc.target/arm/movhi_movw.c: New test.
+	* gcc.target/arm/movsi_movw.c: Likewise.
+	* gcc.target/arm/movdi_movw.c: Likewise.
+
+2016-07-11  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* lib/target-supports.exp: Generate add_options_for_arm_arch_FUNC and
+	check_effective_target_arm_arch_FUNC_multilib for ARMv8-M Baseline and
+	ARMv8-M Mainline architectures.
+
+2016-07-11  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	Backport from mainline
+	2016-07-07  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+	* lib/target-supports.exp (check_effective_target_arm_cortex_m): Use
+	__ARM_ARCH_ISA_ARM to test for Cortex-M devices.

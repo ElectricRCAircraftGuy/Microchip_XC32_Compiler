@@ -1,0 +1,127 @@
+# Exit immediately if this isn't a PIC32C target.
+if ![istarget pic32c*-*-*] then {
+  return
+}
+
+# Load support procs.
+load_lib gcc-defs.exp
+load_lib gcc-dg.exp
+
+# Initialize `dg'.
+dg-init
+
+# If a testcase doesn't have special options, use these.
+global DEFAULT_CFLAGS
+if ![info exists DEFAULT_CFLAGS] then {
+    set DEFAULT_CFLAGS ""
+}
+
+# This variable should only apply to tests called in this exp file.
+global dg_runtest_extra_prunes
+global allow_blank_lines
+set allow_blank_lines 1
+set dg_runtest_extra_prunes ""
+lappend dg_runtest_extra_prunes "warning: switch -m(cpu|arch)=.* conflicts with -m(cpu|arch)=.* switch"
+lappend dg_runtest_extra_prunes "Warning: Version in specs file missing or does not match compiler version"
+lappend dg_runtest_extra_prunes ".*warning: Linking stub _mon_getc().*"
+lappend dg_runtest_extra_prunes ".*warning: Linking stub _mon_putc().*"
+
+# dg action to scan map output for a regexp. testcase supplies map file name as
+# first argument
+proc scan-map { args } {
+    set testcase [testname-for-summary]
+    set output_file [file tail [lindex $args 0]]
+
+    dg-scan "scan-map" 1 $testcase $output_file [lrange $args 1 end]
+}
+
+# dg action to scan map output for absense of regexp. testcase supplies map file name as
+# first argument
+proc scan-map-not { args } {
+    set testcase [testname-for-summary]
+    set output_file [file tail [lindex $args 0]]
+
+    dg-scan "scan-map" 0 $testcase $output_file [lrange $args 1 end]
+}
+
+proc find_objdump { } {
+    global tool_root_dir
+    global TEST_GCC_EXEC_PREFIX
+
+    verbose "find_objdump" 1
+
+    set CC ""
+    if {![is_remote host]} {
+        set file [lookfor_file $tool_root_dir/../../binutils/binutils objdump]
+        if { $TEST_GCC_EXEC_PREFIX != "" } {
+          if { $file == "" } {
+              set file [lookfor_file $TEST_GCC_EXEC_PREFIX/../../bin pic32c-objdump]
+          }
+          if { $file == "" } {
+              set file [lookfor_file $TEST_GCC_EXEC_PREFIX/../../bin/bin pic32c-objdump]
+          }
+        }
+        if { $file != "" } {
+            set CC "$file"
+        }
+    }
+    verbose "found $CC"
+    return $CC
+}
+
+# dg action to scan objdump disassembler for a regexp.
+proc scan-disasm { args } {
+    verbose "in scan" 1
+
+    set testcase [testname-for-summary]
+    set output_file "[file rootname [file tail $testcase]].exe"
+    set dis_file "[file rootname [file tail $testcase]].dis"
+
+    verbose "in scan-disasm" 1
+
+    set objdump [find_objdump]
+
+    if {[info exists target_info(host,name)]} {
+	set host [host_info name]
+    } else {
+	set host "unix"
+    }
+
+    verbose "got objdump = $objdump" 1
+    set status [remote_exec host "$objdump" "-d $output_file" "$output_file" "$dis_file"]
+    dg-scan "scan-disasm" 1 $testcase $dis_file $args
+}
+
+# dg action to scan objdump disassembler for absense of a regexp.
+proc scan-disasm-not { args } {
+    set testcase [testname-for-summary]
+    set output_file "[file rootname [file tail $testcase]].exe"
+    set dis_file "[file rootname [file tail $testcase]].dis"
+    set objdump [find_objdump]
+
+    if {[info exists target_info(host,name)]} {
+	set host [host_info name]
+    } else {
+	set host "unix"
+    }
+
+    set status [remote_exec host "$objdump" "-d $output_file" "$output_file" "$dis_file"]
+    dg-scan "scan-disasm" 0 $testcase $dis_file $args
+}
+
+# Get relative path for source files.
+set where [file dirname [info script]]
+
+# -opt.c files check for mangled symbol generation
+dg-runtest [lsort [glob -nocomplain $where/*-opt*.c]] "" ""
+
+# -chk.c files check for compile/link errors.
+dg-runtest [lsort [glob -nocomplain $where/*-chk*.c]] "" ""
+
+# -fold.c files check for folding optimizations
+dg-runtest [lsort [glob -nocomplain $where/*-fold*.c]] "" ""
+
+set allow_blank_lines 0
+set dg_runtest_extra_prunes ""
+dg-finish
+

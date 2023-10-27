@@ -1,0 +1,88 @@
+# Rules common to all pic32c targets
+#
+# Copyright (C) 2004-2013 Free Software Foundation, Inc.
+#
+# This file is part of GCC.
+#
+# GCC is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# GCC is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GCC; see the file COPYING3.  If not see
+# <http://www.gnu.org/licenses/>.
+
+PASSES_EXTRA += $(srcdir)/config/pic32c/pic32c-passes.def
+
+offset_addressing.o: $(srcdir)/config/pic32c/offset_addressing.cc
+	$(COMPILE) $<
+	$(POSTCOMPILE)
+
+loop_exiting_edges.o: $(srcdir)/config/pic32c/loop_exiting_edges.c
+	$(COMPILE) $<
+	$(POSTCOMPILE)
+
+loop_regrename.o: $(srcdir)/config/pic32c/loop_regrename.cc
+	$(COMPILE) $< -std=c++11
+	$(POSTCOMPILE)
+
+#Microchip common code
+cci.o: $(srcdir)/config/mchp-cci/cci.c $(srcdir)/config/mchp-cci/cci.h
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES)\
+	  $(srcdir)/config/mchp-cci/cci.c
+
+cci-backend.o: $(srcdir)/config/mchp-cci/cci-backend.c $(srcdir)/config/mchp-cci/cci.h
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES)\
+	  $(srcdir)/config/mchp-cci/cci-backend.c
+
+cci-pragmas.o: $(srcdir)/config/mchp-cci/cci-pragmas.c $(srcdir)/config/mchp-cci/cci-pragmas.h
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES)\
+	  $(srcdir)/config/mchp-cci/cci-pragmas.c
+
+mchp-common.o: $(srcdir)/config/mchp-cci/mchp-common.c
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES)\
+	  $(srcdir)/config/mchp-cci/mchp-common.c
+
+mchp_pragma_config.o: $(srcdir)/config/mchp-cci/mchp_pragma_config.c
+	$(COMPILE) $<
+	$(POSTCOMPILE)
+
+#Microchip SHA APIs used by pic32c.c
+sha256.o: $(srcdir)/config/mchp-cci/sha256.c \
+	$(srcdir)/config/mchp-cci/sha256.h
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES)\
+	  $(srcdir)/config/mchp-cci/sha256.c
+
+mchp_sha.o: $(srcdir)/config/mchp-cci/mchp_sha.c \
+	$(srcdir)/config/mchp-cci/mchp_sha.h 
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) \
+	  $(srcdir)/config/mchp-cci/mchp_sha.c
+
+# Microchip PIC32C-specific format checking and pragmas
+
+pic32c.o: $(srcdir)/config/pic32c/pic32c.c $(CONFIG_H) $(SYSTEM_H) \
+	coretypes.h $(TM_H) $(TREE_H) output.h $(C_COMMON_H) \
+	$(srcdir)/config/pic32c/pic32c.h $(srcdir)/config/mchp-cci/xclm_public.h \
+	$(srcdir)/config/pic32c/pic32c-protos.h \
+        $(srcdir)/config/pic32c/pic32c-debug.h 
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
+		$(srcdir)/config/pic32c/pic32c.c
+
+pic32c-coverage.o: $(srcdir)/config/pic32c/pic32c-coverage.c $(CONFIG_H) $(SYSTEM_H) \
+        coretypes.h $(TARGET_H) $(RTL_H) output.h $(C_COMMON_H) \
+        $(srcdir)/config/pic32c/pic32c.h $(srcdir)/config/mchp-cci/xclm_public.h \
+        $(srcdir)/config/pic32c/pic32c-protos.h \
+        $(srcdir)/config/pic32c/pic32c-debug.h
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
+                $(srcdir)/config/pic32c/pic32c-coverage.c
+
+mchp-license-manager.o: ALL_CPPFLAGS += -imacros host-lm.h
+mchp-license-manager.o: $(srcdir)/config/pic32c/mchp-license-manager.c
+	$(COMPILE) $<
+	$(POSTCOMPILE)

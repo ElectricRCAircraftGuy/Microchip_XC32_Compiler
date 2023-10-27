@@ -1,0 +1,86 @@
+# Run the C compiler with GCC_OPTIONS and inspect the compiler,
+# assembler and linker output (from gcc -v) to make sure that they
+# match the patterns COMPILER_PATTERN, AS_PATTERN and LD_PATTERN,
+# respectively.
+
+if ![istarget pic32c*-*-*] then {
+  return
+}
+
+load_lib gcc-defs.exp
+load_lib gcc-dg.exp
+
+# These tests don't run runtest_file_p consistently if it
+# doesn't return the same values, so disable parallelization
+# of this *.exp file.  The first parallel runtest to reach
+# this will run all the tests serially.
+if ![gcc_parallel_test_run_p options] {
+    return
+}
+
+gcc_parallel_test_enable 0
+
+proc check_option_output {gcc_options output_pattern} {
+    set filename test-[pid]
+    set fd [open $filename.c w]
+    puts $fd "int main (void) \{ return 0; \}"
+    close $fd
+    remote_download host $filename.c
+
+    set test "compiler driver $gcc_options option(s)"
+    set gcc_options "\{additional_flags=$gcc_options\}"
+
+    set compiler cc1
+    
+    set gcc_output [gcc_target_compile $filename.c $filename.x executable $gcc_options]
+    remote_file build delete $filename.c $filename.x $filename.gcno
+
+    if {![regexp -- "$output_pattern" $gcc_output]} {
+        fail "$test (compiler output)"
+        return
+    }
+}
+
+proc check_for_all_options {gcc_options compiler_output compiler_pattern as_pattern ld_pattern} {
+    set filename test-[pid]
+    set fd [open $filename.c w]
+    puts $fd "int main (void) \{ return 0; \}"
+    close $fd
+    remote_download host $filename.c
+
+    set test "compiler driver $gcc_options option(s)"
+    set gcc_options "\{additional_flags=$gcc_options -v\}"
+
+    set compiler cc1
+    
+    set gcc_output [gcc_target_compile $filename.c $filename.x executable $gcc_options]
+    remote_file build delete $filename.c $filename.x $filename.gcno
+
+    if {![regexp -- "/${compiler}(\\.exe)? -quiet.*$compiler_pattern" $gcc_output]} {
+	fail "$test (compiler options)"
+	return
+    }
+    if {![regexp -- " *as(\\.exe)? .*$as_pattern" $gcc_output]} {
+	fail "$test (assembler options)"
+	return
+    }
+    if {![regexp -- "/collect2(\\.exe)? .*$ld_pattern" $gcc_output]} {
+	fail "$test (linker options)"
+	return
+    }
+
+    pass $test
+}
+
+# TODO: Add -mprocessor options here and inspect for spec files etc?
+
+check_option_output {-mprint-builtins} {__builtin}
+
+gcc_parallel_test_enable 1
+
+dg-runtest [lsort [glob -nocomplain $srcdir/$subdir/opt-*.\[cCS\]]] "" ""
+dg-runtest [lsort [glob -nocomplain $srcdir/$subdir/attr-*.\[cCS\]]] "" ""
+
+dg-finish
+
+

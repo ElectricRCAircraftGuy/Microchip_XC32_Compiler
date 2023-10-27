@@ -1,0 +1,295 @@
+\input texinfo @c -*-texinfo-*-
+@c %**start of header
+@c makeinfo and texinfo.tex ignore all text before @setfilename.
+@c
+@c Ordinarily, the setfilename argument ends with .info.  But
+@c texinfo.info-13 is too long for 14-character filesystems.
+@setfilename how-to-build-toolchain.info
+@include version.texi
+@settitle How To Build Toolchain
+@paragraphindent asis
+@c %**end of header
+
+@copying
+Copyright @copyright{} 2012-@value{CURRENT_YEAR} ARM Ltd.
+@end copying
+
+@finalout
+@smallbook
+
+@titlepage
+@title The Build Process
+@subtitle of @value{VERSION_PACKAGE}
+@subtitle @value{CURRENT_YEAR}-@value{CURRENT_MONTH}
+
+@c The following two commands start the copyright page
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@c Output the table of contents at the beginning.
+@contents
+
+@ifnottex
+@node Top
+@top How To Build Toolchain
+
+@insertcopying
+@end ifnottex
+
+@node Preface
+@unnumbered Preface
+This manual provides a step-by-step guide to help you build
+@samp{GNU Tools for ARM Embedded Processors} on a newly installed
+Ubuntu 14.04 LTS 64-bit operating system.
+
+@noindent
+Note that the steps below may most likely also work on an Ubuntu which is
+not newly installed or version other than 14.04 LTS, but it is not guaranteed.
+In this case please go through @ref{Known Issues} before you go, and
+you need to solve any other problems you may encounter by yourself.  We
+highly appreciate if you could share the problems and solutions with us.
+
+@node Ubuntu
+@chapter Build GNU Tools for Linux and Windows Platforms
+
+@node Install Ubuntu
+@section Install Ubuntu
+@c Use '@/' to allow break inside a URL
+Ubuntu 14.04.5 ISO image is available from
+@uref{http://releases.ubuntu.com@//14.04@//ubuntu-14.04.5-desktop-amd64.iso}.
+You can install it as a native system or a virtual machine.
+
+@page
+@node Install Dependencies
+@section Install Dependencies
+
+@smallexample
+@group
+$ echo \
+  @w{"deb http://archive.ubuntu.com/ubuntu/ trusty main restricted universe multiverse" \}
+  > /etc/apt/sources.list
+
+$ echo "deb http://security.ubuntu.com/ubuntu trusty-security main" \
+     >> /etc/apt/sources.list
+
+$ echo "deb http://archive.ubuntu.com/ubuntu xenial main universe"  \
+     > /etc/apt/sources.list.d/xenial.list
+
+$ echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe" \
+     >> /etc/apt/sources.list.d/xenial.list
+
+@codequoteundirected on
+$ echo 'APT::Default-Release "trusty";' > /etc/apt/apt.conf.d/00default
+@codequoteundirected off
+
+$ dpkg --add-architecture i386
+
+$ sudo apt-get update
+
+$ sudo apt-get install -y -t xenial \
+  gcc-mingw-w64-i686 g++-mingw-w64-i686 binutils-mingw-w64-i686
+
+$ sudo apt-get -f install -y \
+    apt-src \
+    autoconf \
+    autogen \
+    bison \
+    dejagnu \
+    flex \
+    flip \
+    gawk \
+    git \
+    gperf \
+    gzip \
+    nsis \
+    openssh-client \
+    p7zip-full \
+    perl \
+    python-dev \
+    libisl-dev \
+    scons \
+    tcl \
+    texinfo \
+    tofrodos \
+    wget \
+    zip \
+    texlive \
+    texlive-extra-utils
+@end group
+@end smallexample
+
+
+@noindent
+Note that there may be some warnings about Multi-Arch for some
+packages and update alternatives for MinGW32 GCC. Ignore these
+as they dont affect the build.
+
+@node Download and deploy prebuilt native tools
+@subsection Download and deploy prebuilt native tools
+In order to save effort to prepare the native build tools, we provide prebuilt
+ones at website @uref{https://launchpad.net/gcc-arm-embedded-misc@//native-build-tools@//20150408}.  The related source package and script are also provided.  Please download the tools.
+
+@page
+@node Build GNU Tools for ARM Embedded Processors
+@section Build GNU Tools for ARM Embedded Processors
+
+@noindent
+You are now ready to build the toolchain.
+
+@smallexample
+@group
+@set txicodequoteundirected
+# Copy the src release package into ~/toolchain/ directory
+$ cp @value{PKG_NAME}-src.tar.bz2 ~/toolchain
+
+# Untar the source tarball.
+$ cd ~/toolchain
+$ tar -xjf @value{PKG_NAME}-src.tar.bz2
+$ cd ./@value{PKG_NAME}/src
+$ find -name '*.tar.*' | xargs -I% tar -xf %
+$ wget http://nsis.sourceforge.net/mediawiki/images/a/ad/EnvVarUpdate.7z
+$ tar xf <path to prebuilt tools>/prebuilt-native-tools.tar.lzma \
+  --strip-components=1 prebuilt-native-tools/python-win
+$ cd ../
+
+# Build the toolchain(s).
+$ ./build-prerequisites.sh
+$ ./build-toolchain.sh
+
+# You can specify "--skip_steps=mingw32" option to skip building Windows host
+# toolchain. If you specify this option when building prerequisites,
+# you have to specify it when building toolchain too.
+
+@clear txicodequoteundirected
+@end group
+@end smallexample
+
+@noindent
+Once the build completes you can find the binary and source tarballs in
+ @* @samp{~/toolchain/@value{PKG_NAME}/pkg}
+along with the md5 checksum.
+
+@node Mac
+@chapter Build GNU Tools on Mac OS X
+In addition to the build on Ubuntu, the build scripts in same source
+package can also be used on Mac OS X to natively build a tool chain
+whose host is Mac OS X and target is arm-none-eabi.  In this step we
+will describe how to install required software components and how to
+execute the build scripts.  After this step you should be able to
+generate a same tool chain with the one released.  Due to resource
+limit, this build process is only tested against Mac OS X 10.7.3 along
+with components listed below.
+
+@node Prepare a Mac OS X environment
+@section Prepare a Mac OS X environment
+The hardware should be an x86-based Mac machine like iMac. The installed
+OS should be Mac OS X which is updated to 10.7.3.  The way to find out
+the Mac OS X version information is to click the @strong{Apple} menu and
+choose @strong{About This Mac}.
+
+@sp 1
+@center @image{click-apple-menu,,,,.png}
+
+@page
+@noindent
+For the environment we are using, it looks as below:
+
+@sp 1
+@center @image{about-this-mac,,,,.png}
+
+@node Install the Command Line Tools for Xcode
+@section Install the Command Line Tools for Xcode
+This component is originally part of Apple Xcode but can be installed
+separately without Xcode.  It can be freely obtained from Apple's official
+website @uref{https://developer.apple.com@//downloads/index.action}.
+A valid Apple ID is required to login and download.  The one we are using
+is in the item named @samp{Command Line Tools (OS X Lion) for Xcode - April 2013}.
+After the download finishes, just double click the @samp{.dmg} file and
+follow the instructions to install it.
+
+@node Install a native version of gcc 5 using MacPorts
+@section  Install a native version of gcc 5 using MacPorts
+Download and install MacPorts for Mac OS X Lion following the steps on MacPorts
+website @uref{https://www.macports.org/install.php#installing}.
+Then use MacPorts to install gcc5 with the following commands:
+
+@smallexample
+# Install gcc 5
+$ sudo port install gcc5
+
+# Make sure the newly installed gcc is the one reachable by PATH
+$ sudo ln -s /opt/local/bin/@{x86_64-apple-darwin11-gcc-5.*,gcc@}
+$ sudo ln -s /opt/local/bin/@{g++-mp-5,g++@}
+$ export PATH=/opt/local/bin:$PATH
+@end smallexample
+
+@node Install MacTeX to build PDF format documents
+@section Install MacTeX to build PDF format documents
+This is an optional step and can be skipped if PDF format documents aren't
+needed.  The build process will use TeX engineer provided by MacTeX-2012 to
+generate PDF format documents.  This component can be freely obtained from
+its official FTP server
+@uref{ftp://ftp.tug.org/historic/systems/mactex/2012/MacTeX.pkg}.
+Its original size is approximately 2.1G.  Once downloaded, just double click
+on the @samp{MacTeX.pkg} file and follow the instructions to install it.  By
+default the related TeX executable files won't be installed into the default
+path like @samp{/usr/bin}, so the Terminal need to be restarted before running
+the build scripts.
+
+@node Build the tool chain under Mac OS X
+@section Build the tool chain under Mac OS X
+With all the dependent packages installed, we can start to natively
+build the tool chain on Mac OS.  Following are the commands and steps we are
+using:
+
+@smallexample
+@set txicodequoteundirected
+
+#Copy the src release package into ~/mac-build/ directory
+$ cp @value{PKG_NAME}-src.tar.bz2 ~/mac-build
+
+#Prepare source codes
+$ cd ~/mac-build
+$ tar xjf @value{PKG_NAME}-src.tar.bz2
+$ cd ./@value{PKG_NAME}/src
+$ find . -name '*.tar.*' | xargs -I% tar -xf %
+$ cd ..
+
+#Start building the toolchain.
+$ ./build-prerequisites.sh
+$ ./build-toolchain.sh
+
+@clear txicodequoteundirected
+@end smallexample
+
+@node Known Issues
+@appendix Known Issues
+
+@itemize @bullet
+@item
+If you are using different build environment and tools, you might run
+into a problem where binutils can not be successfully built.  This is
+probably caused by binutils bug 13036.
+For more information, please refer to 
+@uref{http://sourceware.org/bugzilla/show_bug.cgi?id=13036}.
+
+@item
+Some shell scripts in gcc and other packages are incompatible with
+the dash shell, which is the default /bin/sh for Ubuntu 14.04 LTS.
+You must make /bin/sh a symbolic link to one of the supported shells:
+saying bash.  Here on Ubuntu 14.04 LTS system, this can be done by
+running following command:
+@smallexample
+$ sudo dpkg-reconfigure -plow dash
+@end smallexample
+
+Then choose @samp{No} in the @samp{Configuring dash} popup dialog and
+press enter.  You can run following command and check that /bin/sh
+points to @samp{bash}:
+@smallexample
+$ ls -l /bin/sh
+...... /bin/sh -> bash
+@end smallexample
+@bye

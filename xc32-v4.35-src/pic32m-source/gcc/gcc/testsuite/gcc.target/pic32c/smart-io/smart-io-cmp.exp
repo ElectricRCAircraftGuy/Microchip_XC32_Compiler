@@ -1,0 +1,120 @@
+# Exit immediately if this isn't a PIC32C target.
+if ![istarget pic32c*-*-*] then {
+  return
+}
+
+# Load support procs.
+load_lib gcc-defs.exp
+load_lib gcc-dg.exp
+
+# Initialize `dg'.
+dg-init
+
+# If a testcase doesn't have special options, use these.
+global DEFAULT_CFLAGS
+if ![info exists DEFAULT_CFLAGS] then {
+    set DEFAULT_CFLAGS ""
+}
+
+# This variable should only apply to tests called in this exp file.
+global dg_runtest_extra_prunes
+global allow_blank_lines
+set allow_blank_lines 1
+set dg_runtest_extra_prunes ""
+lappend dg_runtest_extra_prunes "warning: switch -m(cpu|arch)=.* conflicts with -m(cpu|arch)=.* switch"
+lappend dg_runtest_extra_prunes "Warning: Version in specs file missing or does not match compiler version"
+lappend dg_runtest_extra_prunes ".*warning: Linking stub _mon_getc().*"
+lappend dg_runtest_extra_prunes ".*warning: Linking stub _mon_putc().*"
+
+# Compare executable output with and without -msmart-io
+proc smart-io-compare { sources args } {
+    global tmpdir srcdir output target_triplet
+
+    set src [lindex $sources 0]
+
+    if { [llength $args] > 0 } {
+        set additional_flags [lindex $args 0]
+    } else {
+        set additional_flags ""
+    }
+
+    set cmd_plain [file tail [file rootname $src].plain.x]
+    set cmd_smart [file tail [file rootname $src].smart.x]
+
+    set exec_plain $tmpdir/$cmd_plain
+    set exec_smart $tmpdir/$cmd_smart
+
+    regsub "(?q)$srcdir/" $src "" testcase
+    if [string match "/*" $testcase] {
+	    set testcase "[file tail [file dirname $src]]/[file tail $src]"
+    }
+
+    set options ""
+    if { $additional_flags != "" } {
+        lappend options "additional_flags=$additional_flags"
+    }
+
+    file_on_host delete $exec_plain
+    file_on_host delete $exec_smart
+    verbose "Testing $testcase" 1
+
+    set options_plain "$options -mno-smart-io"
+
+    set comp_output_plain [gcc_target_compile "$sources" "${exec_plain}" executable $options_plain]
+    set comp_output_plain [gcc-dg-prune $target_triplet $comp_output_plain]
+
+    if ![gcc_check_compile "$testcase compilation" $options_plain $exec_plain $comp_output_plain] {
+        unresolved "$testcase execution, $options_plain"
+        file_on_host delete $exec_plain
+        return 0
+    }
+
+    set comp_output_smart [gcc_target_compile "$sources" "${exec_smart}" executable $options]
+    set comp_output_smart [gcc-dg-prune $target_triplet $comp_output_smart]
+
+    if ![gcc_check_compile "$testcase compilation" $options $exec_smart $comp_output_smart] {
+        unresolved "$testcase execution, $options"
+        file_on_host delete $exec_smart
+        return 0
+    }
+   
+    set result_plain [gcc_load "$cmd_plain" "" ""]
+    verbose "got result_plain: $result_plain"
+    set status_plain [lindex $result_plain 0]
+    set output_plain [lindex $result_plain 1]
+
+    if { $status_plain != "pass" } {
+        unresolved "$testcase execution, $exec_plain"
+        file_on_host delete $exec_plain
+        file_on_host delete $exec_smart
+        return 0
+    }
+
+    set result_smart [gcc_load "$cmd_smart" "" ""]
+    set status_smart [lindex $result_smart 0]
+    set output_smart [lindex $result_smart 1]
+
+    if { $status_smart != "pass" } {
+        unresolved "$testcase execution, $exec_smart"
+        file_on_host delete $exec_plain
+        file_on_host delete $exec_smart
+        return 0
+    }
+
+    if { ! [string equal $output_plain $output_smart] } {
+        fail "$testcase comparison: $output_plain != $output_smart"
+    } else {
+        pass "$testcase comparison"
+    }
+
+    file_on_host delete $exec_plain
+    file_on_host delete $exec_smart
+    return 0
+}
+
+# -cmp.c files check output vs. no-smart-io.
+set dg-do-what-default "run"
+foreach src [lsort [find $srcdir/$subdir *-cmp.c]] {
+    smart-io-compare [list $src] "$DEFAULT_CFLAGS"
+}
+

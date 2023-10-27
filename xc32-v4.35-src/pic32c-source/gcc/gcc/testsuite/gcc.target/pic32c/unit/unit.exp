@@ -1,0 +1,23 @@
+# Placeholder for compiler development unit tests. 
+
+# Load support procs.
+load_lib gcc-defs.exp
+load_lib gcc-dg.exp
+
+# Initialize `dg'.
+dg-init
+
+# If a testcase doesn't have special options, use these.
+global DEFAULT_CFLAGS
+if ![info exists DEFAULT_CFLAGS] then {
+    set DEFAULT_CFLAGS " "
+}
+
+# Get relative path for source files.
+set where [file dirname [info script]]
+
+dg-runtest [lsort [glob -nocomplain $where/*.\[cCS\]]] \
+	"" $DEFAULT_CFLAGS
+
+# All done.
+dg-finish

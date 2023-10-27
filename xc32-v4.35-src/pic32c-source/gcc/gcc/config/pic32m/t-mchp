@@ -1,0 +1,116 @@
+# We must build libgcc2.a with -G 0, in case the user wants to link
+# without the $gp register. Use -fno-optimize-sibling-calls in case
+# we have a mixed mips16/non-mips16 environment where a plain "jump"
+# instuction won't work across the divide (no jx instruction).
+# Compile libraries with -mcode-xonly, so that they are link-compatible
+# with both -mcode-readable=pcrel and -mcode-readable=yes.
+TARGET_LIBGCC2_CFLAGS = -msmart-io=0
+
+# Don't let CTOR_LIST end up in sdata section.
+CRTSTUFF_T_CFLAGS = -G 0 -D_BUILD_C32_ -minterlink-compressed
+
+# Build the multilibs.
+# LIBGCC = stmp-multilib
+# INSTALL_LIBGCC = install-multilib
+
+MULTILIB_OPTIONS     :=
+MULTILIB_DIRNAMES    :=
+MULTILIB_EXCEPTIONS  :=
+MULTILIB_MATCHES     :=
+MULTILIB_REUSE       :=
+MULTILIB_REQUIRED    :=
+
+# This is a bit of a mess.
+#
+# mfp64 was in these options, but the only devices we support
+# apparently do not use mfp32. 
+#
+# hard-float is the mips default, but we force soft-float. 
+# there is no soft-float library variant, as this seems to be only
+# implemented by somehow rerouting library calls to soft variants.
+#
+# no-float was used here, but the option doesn't really apply to libraries
+# apart from allowing for no float support in stdio.
+# 
+# soft-float would make sense as a variant with libraries built against
+# floating-point emulation routines, but the build includes libraries
+# which force hard-float or use explicitly hard assembler. 
+#
+# mfp64 is effectively an alias for hard-float here. mhard-float without
+# mfp64 will link against soft-float libraries and lead to an error.
+
+# implicit defaults are EL, mips32r2, msoft-float.
+MULTILIB_OPTIONS     += mips16/mmicromips mfp64
+MULTILIB_DIRNAMES    += mips16 micromips fpu64
+
+MULTILIB_MATCHES     += mips16=mips16e
+
+MULTILIB_EXCEPTIONS  += *mips16*/*mfp64*
+
+EXTRA_MULTILIB_PARTS = crtbegin.o crtend.o
+MULTILIB_EXTRA_OPTS  = Os mno-jals G0 fno-optimize-sibling-calls fno-common mmips16-exceptions minterlink-compressed D_BUILD_C32_
+
+#Microchip SHA APIs used by mchp.c
+sha256.o: $(srcdir)/config/mchp-cci/sha256.c \
+  $(srcdir)/config/mchp-cci/sha256.h
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES)\
+	 $(srcdir)/config/mchp-cci/sha256.c
+
+mchp_sha.o: $(srcdir)/config/mchp-cci/mchp_sha.c \
+  $(srcdir)/config/mchp-cci/mchp_sha.h 
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) \
+	 $(srcdir)/config/mchp-cci/mchp_sha.c
+
+# Force license manager enablement
+mchp-license-manager.o: ALL_CPPFLAGS += -imacros host-lm.h
+mchp-license-manager.o: $(srcdir)/config/pic32m/mchp-license-manager.c
+	$(COMPILE) $<
+	$(POSTCOMPILE)
+
+# Microchip PIC32-specific format checking and pragmas
+mchp.o: ALL_CPPFLAGS += -imacros host-lm.h
+mchp.o: $(srcdir)/config/pic32m/mchp.c
+	$(COMPILE) $<
+	$(POSTCOMPILE)
+
+mchp-pragmas.o: $(srcdir)/config/pic32m/mchp-pragmas.c \
+  $(srcdir)/config/mchp-cci/cci.c \
+  $(srcdir)/config/mchp-cci/cci.h \
+  $(srcdir)/config/pic32m/mchp-pragmas.h \
+  $(CONFIG_H) $(SYSTEM_H) coretypes.h \
+  tree.h c-family/c-format.h intl.h $(CPPLIB_H) c-family/c-pragma.h $(TM_H) $(TM_P_H) \
+  toplev.h libfuncs.h langhooks.h sched-int.h function.h $(C_COMMON_H) \
+  $(srcdir)/config/mips/mips-machine-function.h $(srcdir)/config/pic32m/mchp-protos.h
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
+	  $(srcdir)/config/pic32m/mchp-pragmas.c
+
+cci-backend.o: $(srcdir)/config/mchp-cci/cci-backend.c \
+  $(srcdir)/config/mchp-cci/cci-backend.h \
+  $(CONFIG_H) $(SYSTEM_H) coretypes.h \
+  tree.h c-family/c-format.h intl.h $(CPPLIB_H) $(TM_H) $(TM_P_H) \
+  toplev.h libfuncs.h langhooks.h sched-int.h function.h $(C_COMMON_H)
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
+	  $(srcdir)/config/mchp-cci/cci-backend.c
+
+mchp-hi-addr-analysis.o : $(srcdir)/config/pic32m/mchp-hi-addr-analysis.c $(CONFIG_H) $(SYSTEM_H) coretypes.h $(TM_H) $(RTL_H) \
+   $(REGS_H) hard-reg-set.h $(FLAGS_H) insn-config.h \
+   $(RECOG_H) $(EXPR_H) $(BASIC_BLOCK_H) $(FUNCTION_H) toplev.h $(DIAGNOSTIC_CORE_H) \
+   $(TM_P_H) $(PARAMS_H) cselib.h $(EXCEPT_H) $(TREE_H) \
+   intl.h $(OBSTACK_H) $(TREE_PASS_H) $(DF_H) $(DBGCNT_H) $(TARGET_H) \
+   $(DF_H) $(CFGLOOP_H)
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
+	  $(srcdir)/config/pic32m/mchp-hi-addr-analysis.c
+
+mchp-common.o: $(srcdir)/config/mchp-cci/mchp-common.c
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
+	  $(srcdir)/config/mchp-cci/mchp-common.c
+
+mchp_pragma_config.o: $(srcdir)/config/mchp-cci/mchp_pragma_config.c
+	$(COMPILE) $<
+	$(POSTCOMPILE)
+
+pic32-coverage.o: $(srcdir)/config/pic32m/pic32-coverage.c \
+  $(CONFIG_H) $(SYSTEM_H) coretypes.h $(TM_H) dwarf2asm.h\
+  xc-coverage.h $(C_COMMON_H)
+	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
+          $(srcdir)/config/pic32m/pic32-coverage.c
