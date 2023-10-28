@@ -60,7 +60,7 @@ sha256.o: $(srcdir)/config/mchp-cci/sha256.c \
 	  $(srcdir)/config/mchp-cci/sha256.c
 
 mchp_sha.o: $(srcdir)/config/mchp-cci/mchp_sha.c \
-	$(srcdir)/config/mchp-cci/mchp_sha.h 
+	$(srcdir)/config/mchp-cci/mchp_sha.h
 	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) \
 	  $(srcdir)/config/mchp-cci/mchp_sha.c
 
@@ -70,7 +70,7 @@ pic32c.o: $(srcdir)/config/pic32c/pic32c.c $(CONFIG_H) $(SYSTEM_H) \
 	coretypes.h $(TM_H) $(TREE_H) output.h $(C_COMMON_H) \
 	$(srcdir)/config/pic32c/pic32c.h $(srcdir)/config/mchp-cci/xclm_public.h \
 	$(srcdir)/config/pic32c/pic32c-protos.h \
-        $(srcdir)/config/pic32c/pic32c-debug.h 
+        $(srcdir)/config/pic32c/pic32c-debug.h
 	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
 		$(srcdir)/config/pic32c/pic32c.c
 
@@ -82,7 +82,7 @@ pic32c-coverage.o: $(srcdir)/config/pic32c/pic32c-coverage.c $(CONFIG_H) $(SYSTE
 	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
                 $(srcdir)/config/pic32c/pic32c-coverage.c
 
-mchp-license-manager.o: ALL_CPPFLAGS += -imacros host-lm.h
-mchp-license-manager.o: $(srcdir)/config/pic32c/mchp-license-manager.c
-	$(COMPILE) $<
-	$(POSTCOMPILE)
+# mchp-license-manager.o: ALL_CPPFLAGS += -imacros host-lm.h
+# mchp-license-manager.o: $(srcdir)/config/pic32c/mchp-license-manager.c
+# 	$(COMPILE) $<
+# 	$(POSTCOMPILE)

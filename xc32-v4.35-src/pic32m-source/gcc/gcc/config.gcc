@@ -174,7 +174,7 @@
 #			the --with-sysroot configure option or the
 #			--sysroot command line option is used this
 #			will be relative to the sysroot.
-# target_type_format_char 
+# target_type_format_char
 # 			The default character to be used for formatting
 #			the attribute in a
 #			.type symbol_name, ${t_t_f_c}<property>
@@ -342,7 +342,9 @@ pic32c*-*-*)
     cxx_target_objs="arm-c.o"
     extra_options="${extra_options} arm/arm-tables.opt pic32c/pic32c.opt"
     target_gtfiles="\$(srcdir)/config/arm/arm-builtins.c"
-    extra_objs="${extra_objs} offset_addressing.o loop_exiting_edges.o loop_regrename.o pic32c.o mchp-license-manager.o sha256.o mchp_sha.o cci.o cci-backend.o pic32c-coverage.o mchp_pragma_config.o"
+    # GS REMOVED `mchp-license-manager.o`:
+    # extra_objs="${extra_objs} offset_addressing.o loop_exiting_edges.o loop_regrename.o pic32c.o mchp-license-manager.o sha256.o mchp_sha.o cci.o cci-backend.o pic32c-coverage.o mchp_pragma_config.o"
+    extra_objs="${extra_objs} offset_addressing.o loop_exiting_edges.o loop_regrename.o pic32c.o sha256.o mchp_sha.o cci.o cci-backend.o pic32c-coverage.o mchp_pragma_config.o"
     extra_gcc_objs="${extra_gcc_objs} mchp-common.o"
     ;;
 avr-*-*)
@@ -2423,7 +2425,9 @@ pic32m*-mchp-elf*)
         tmake_file="mips/t-mips pic32m/t-mchp pic32m/t-libgcc-mips16 ${tmake_file}"
         extra_options="pic32m/mchp.opt mips/mips.opt mips/mips-tables.opt g.opt "
         tm_p_file="${tm_p_file} pic32m/mchp-protos.h"
-        extra_objs="${extra_objs} mchp-license-manager.o sha256.o mchp_sha.o mchp.o cci-backend.o mchp-hi-addr-analysis.o mchp-pragmas.o pic32-coverage.o mchp_pragma_config.o"
+        # GS REMOVED `mchp-license-manager.o`:
+        #extra_objs="${extra_objs} mchp-license-manager.o sha256.o mchp_sha.o mchp.o cci-backend.o mchp-hi-addr-analysis.o mchp-pragmas.o pic32-coverage.o mchp_pragma_config.o"
+        extra_objs="${extra_objs} sha256.o mchp_sha.o mchp.o cci-backend.o mchp-hi-addr-analysis.o mchp-pragmas.o pic32-coverage.o mchp_pragma_config.o"
         #extra_gcc_objs="driver-pic32m-elf.o"
         use_gcc_stdint=none
         default_use_cxa_atexit=no

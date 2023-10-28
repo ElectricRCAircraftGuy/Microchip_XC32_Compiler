@@ -27,9 +27,9 @@ $(foreach f,$(mchp-sources),\
 # Add libstdc++ to the list of libraries when linking ld.
 ld-new$(EXEEXT): LIBS += -lmchp -lstdc++
 
-# Needed for the license manager
-ldlang.o: CPPFLAGS += -imacros host-lm.h
-pic32-license-manager.o: CPPFLAGS += -imacros host-lm.h
+# # Needed for the license manager
+# ldlang.o: CPPFLAGS += -imacros host-lm.h
+# pic32-license-manager.o: CPPFLAGS += -imacros host-lm.h
 
 # Create a pattern rule for C++ files.  It only supports creating the
 # dependency files, but that's fine since that's the only build option
