@@ -237,7 +237,7 @@ time ../gcc/configure --prefix=$PWD/opt \
 
 # My c30_resource dir is way out of date; get the new one. Perhaps here: https://www.microchip.com/en-us/tools-resources/develop/mplab-xc-compilers/downloads-documentation#XC32 --> download "32-Bit Language Tools Libraries" and "MPLAB XC32 Users Guide for Embedded Engineers - Code Examples" maybe.
 
-Get is here in the links in the posts: https://forum.microchip.com/s/topic/a5C3l000000MUP5EAO/t346931
+Get it here in the links in the posts: https://forum.microchip.com/s/topic/a5C3l000000MUP5EAO/t346931
 Ex: "xc32-v4.30-c30_resource.tar": https://forum.microchip.com/s/topic/a5C3l000000MUP5EAO/t346931?comment=P-2926726
 
 And for super old compiler 1.42, see JasonK's links here: https://forum.microchip.com/s/topic/a5C3l000000MXp7EAG/t360077?comment=P-2750661. Open a support ticket if you need to.
