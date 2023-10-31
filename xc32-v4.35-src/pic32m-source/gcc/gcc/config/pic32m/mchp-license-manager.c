@@ -456,9 +456,8 @@ pic32_get_license (int current_license, int default_license, int valid_license,
 int
 pic32_licensed_xccov_p ()
 {
-  return true;  // GS
-  // return (mchp_xccov_license_valid == MCHP_XCLM_VALID_CCOV_LICENSE ||
-  //   mchp_xccov_license_valid == MCHP_XCLM_VALID_ANATS_LICENSE);
+  return (mchp_xccov_license_valid == MCHP_XCLM_VALID_CCOV_LICENSE ||
+	  mchp_xccov_license_valid == MCHP_XCLM_VALID_ANATS_LICENSE);
 }
 
 void mchp_override_options_after_change(void) {
@@ -666,7 +665,7 @@ mchp_subtarget_override_options_license (void)
         NULLIFY(mips_base_compression_flags, "micromips mode") = 0;
       }
     }
-
+	  
     if (message_displayed && TARGET_LICENSE_WARNING)
     {
       /*Now display a warning for the Pro option */

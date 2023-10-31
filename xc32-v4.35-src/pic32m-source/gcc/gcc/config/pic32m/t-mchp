@@ -23,18 +23,18 @@ MULTILIB_REQUIRED    :=
 # This is a bit of a mess.
 #
 # mfp64 was in these options, but the only devices we support
-# apparently do not use mfp32.
+# apparently do not use mfp32. 
 #
-# hard-float is the mips default, but we force soft-float.
+# hard-float is the mips default, but we force soft-float. 
 # there is no soft-float library variant, as this seems to be only
 # implemented by somehow rerouting library calls to soft variants.
 #
 # no-float was used here, but the option doesn't really apply to libraries
 # apart from allowing for no float support in stdio.
-#
+# 
 # soft-float would make sense as a variant with libraries built against
 # floating-point emulation routines, but the build includes libraries
-# which force hard-float or use explicitly hard assembler.
+# which force hard-float or use explicitly hard assembler. 
 #
 # mfp64 is effectively an alias for hard-float here. mhard-float without
 # mfp64 will link against soft-float libraries and lead to an error.
@@ -57,18 +57,18 @@ sha256.o: $(srcdir)/config/mchp-cci/sha256.c \
 	 $(srcdir)/config/mchp-cci/sha256.c
 
 mchp_sha.o: $(srcdir)/config/mchp-cci/mchp_sha.c \
-  $(srcdir)/config/mchp-cci/mchp_sha.h
+  $(srcdir)/config/mchp-cci/mchp_sha.h 
 	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) \
 	 $(srcdir)/config/mchp-cci/mchp_sha.c
 
-# # Force license manager enablement
-# mchp-license-manager.o: ALL_CPPFLAGS += -imacros host-lm.h
-# mchp-license-manager.o: $(srcdir)/config/pic32m/mchp-license-manager.c
-# 	$(COMPILE) $<
-# 	$(POSTCOMPILE)
+# Force license manager enablement
+mchp-license-manager.o: ALL_CPPFLAGS += -imacros host-lm.h
+mchp-license-manager.o: $(srcdir)/config/pic32m/mchp-license-manager.c
+	$(COMPILE) $<
+	$(POSTCOMPILE)
 
 # Microchip PIC32-specific format checking and pragmas
-# mchp.o: ALL_CPPFLAGS += -imacros host-lm.h
+mchp.o: ALL_CPPFLAGS += -imacros host-lm.h
 mchp.o: $(srcdir)/config/pic32m/mchp.c
 	$(COMPILE) $<
 	$(POSTCOMPILE)
