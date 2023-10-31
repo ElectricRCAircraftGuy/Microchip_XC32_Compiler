@@ -55,7 +55,12 @@ Build Steps to build your own custom XC32 compiler with*out* having to buy a lic
     sudo apt install -y \
         gcc-mingw-w64-i686 \
         g++-mingw-w64-i686 \
-        binutils-mingw-w64-i686
+        binutils-mingw-w64-i686 \
+        gcc-mingw-w64 \
+        mingw-w64
+    # Note: `gcc-mingw-64` includes: binutils-mingw-w64-x86-64 gcc-mingw-w64-x86-64
+    # gcc-mingw-w64-x86-64-posix gcc-mingw-w64-x86-64-posix-runtime gcc-mingw-w64-x86-64-win32
+    # gcc-mingw-w64-x86-64-win32-runtime mingw-w64-x86-64-dev
 
     # Use `-f` here to try to automatically "fix broken" packages
     sudo apt -f install -y \
