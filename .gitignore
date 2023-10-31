@@ -1,4 +1,6 @@
 
+/temp/
+
 # User build dirs
 xc32-v4.35-src/pic32c-build
 xc32-v4.35-src/pic32m-build
