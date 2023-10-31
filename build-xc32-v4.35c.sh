@@ -10,10 +10,10 @@ SCRIPT_DIRECTORY="$(dirname "$FULL_PATH_TO_SCRIPT")"
 XC32DIR=/opt/microchip/xc32/v4.35
 # Where the sources are located.
 # Default: `SRCDIR=${HOME}/Downloads/src/pic32m-source`
-SRCDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/pic32m-source"
+SRCDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/pic32c-source"
 # Where to store build artifacts.
 # Default: `BUILDDIR=${HOME}/Downloads/build/pic32m-build`
-BUILDDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/pic32m-build"
+BUILDDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/pic32c-build"
 # Where to install the compiler.
 # Default: `INSTALLDIR=${HOME}/Downloads/build/opt`
 INSTALLDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/installed/opt"
@@ -99,11 +99,11 @@ PS4="[macros] "
 #ifndef _XC32_VERSION_
 #define _XC32_VERSION_ 4300
 #endif
-#ifndef TARGET_MCHP_PIC32MX
-#define TARGET_MCHP_PIC32MX 1
+#ifndef TARGET_MCHP_PIC32C
+#define TARGET_MCHP_PIC32C 1
 #endif
-#ifndef TARGET_IS_PIC32MX
-#define TARGET_IS_PIC32MX 1
+#ifndef TARGET_IS_PIC32C
+#define TARGET_IS_PIC32C 1
 #endif
 #ifndef MCHP_VERSION
 #define MCHP_VERSION 4.35
@@ -127,15 +127,15 @@ PS4="[binutils] "
     cd ${binutils_builddir}
 
     ${binutils_srcdir}/configure \
-                      --target=pic32mx \
+                      --target=pic32c \
                       --prefix=${INSTALLDIR} \
-                      --program-prefix=pic32m- \
-                      --with-sysroot=${INSTALLDIR}/pic32mx \
+                      --program-prefix=pic32c- \
+                      --with-sysroot=${INSTALLDIR}/pic32c \
                       --with-bugurl=http://example.com \
                       --with-pkgversion="Microchip XC32 Compiler v4.35 custom" \
                       --bindir=${INSTALLDIR}/bin/bin \
-                      --infodir=${INSTALLDIR}/share/doc/xc32-pic32m-gcc/info \
-                      --mandir=${INSTALLDIR}/share/doc/xc32-pic32m-gcc/man \
+                      --infodir=${INSTALLDIR}/share/doc/xc32-pic32c-gcc/info \
+                      --mandir=${INSTALLDIR}/share/doc/xc32-pic32c-gcc/man \
                       --libdir=${INSTALLDIR}/lib \
                       --disable-nls \
                       --disable-werror \
@@ -173,18 +173,18 @@ PS4="[gcc] "
     cd ${gcc_builddir}
 
     ${gcc_srcdir}/configure \
-                 --target=pic32mx \
+                 --target=pic32c \
                  --prefix=${INSTALLDIR} \
-                 --program-prefix=pic32m- \
-                 --with-sysroot=${INSTALLDIR}/pic32mx \
+                 --program-prefix=pic32c- \
+                 --with-sysroot=${INSTALLDIR}/pic32c \
                  --with-bugurl=http://example.com \
-                 --with-pkgversion="Microchip XC32 Compiler v4.40 custom" \
+                 --with-pkgversion="Microchip XC32 Compiler v4.35 custom" \
                  --bindir=${INSTALLDIR}/bin/bin \
-                 --infodir=${INSTALLDIR}/share/doc/xc32-pic32m-gcc/info \
-                 --mandir=${INSTALLDIR}/share/doc/xc32-pic32m-gcc/man \
+                 --infodir=${INSTALLDIR}/share/doc/xc32-pic32c-gcc/info \
+                 --mandir=${INSTALLDIR}/share/doc/xc32-pic32c-gcc/man \
                  --libdir=${INSTALLDIR}/lib \
                  --libexecdir=${INSTALLDIR}/bin/bin \
-                 --with-build-sysroot=${INSTALLDIR}/pic32mx \
+                 --with-build-sysroot=${INSTALLDIR}/pic32c \
                  --enable-stage1-languages=c \
                  --enable-languages=c,c++ \
                  --enable-target-optspace \
