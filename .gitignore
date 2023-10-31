@@ -1,3 +1,7 @@
 
-# GS: User build dirs
-xc32-v4.35-src/pic32m*/build/
+# User build dirs
+xc32-v4.35-src/pic32c-build
+xc32-v4.35-src/pic32m-build
+
+# Installation dir
+xc32-v4.35-src/installed

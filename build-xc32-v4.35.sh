@@ -1,9 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # See: https://stackoverflow.com/a/60157372/4561887
 FULL_PATH_TO_SCRIPT="$(realpath "${BASH_SOURCE[-1]}")"
 SCRIPT_DIRECTORY="$(dirname "$FULL_PATH_TO_SCRIPT")"
-SCRIPT_FILENAME="$(basename "$FULL_PATH_TO_SCRIPT")"
 
 # Location of an already-installed XC32 4.35 installation.
 # - A file is needed from here.
@@ -11,13 +10,13 @@ SCRIPT_FILENAME="$(basename "$FULL_PATH_TO_SCRIPT")"
 XC32DIR=/opt/microchip/xc32/v4.35
 # Where the sources are located.
 # Default: `SRCDIR=${HOME}/Downloads/src/pic32m-source`
-SRCDIR="$FULL_PATH_TO_SCRIPT/xc32-v4.35-src/pic32m-source"
+SRCDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/pic32m-source"
 # Where to store build artifacts.
 # Default: `BUILDDIR=${HOME}/Downloads/build/pic32m-build`
-BUILDDIR="$FULL_PATH_TO_SCRIPT/xc32-v4.35-src/pic32m-build"
+BUILDDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/pic32m-build"
 # Where to install the compiler.
 # Default: `INSTALLDIR=${HOME}/Downloads/build/opt`
-INSTALLDIR="$FULL_PATH_TO_SCRIPT/xc32-v4.35-src/build/opt"
+INSTALLDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/installed/opt"
 
 # ==================================================================================================
 # Below this point, you don't need to change anything unless you are customizing.
@@ -53,6 +52,12 @@ PS4="[libmchp] "
     time make -j$(nproc) -f ${libmchp_srcdir}/Makefile all
     make -f ${libmchp_srcdir}/Makefile install
 )
+ret_code="$?"
+if [ $ret_code -ne 0 ]; then
+    echo "Error: ${PS4}failed to build!"
+    exit "$ret_code"
+fi
+
 
 # Next, build expat.
 PS4="[expat] "
@@ -67,6 +72,11 @@ PS4="[expat] "
 
     make install
 )
+ret_code="$?"
+if [ $ret_code -ne 0 ]; then
+    echo "Error: ${PS4}failed to build!"
+    exit "$ret_code"
+fi
 
 # Now set some macros that everything will need and put them in a
 # header.  Although they are defined in the binutils target
@@ -146,6 +156,12 @@ PS4="[binutils] "
     make install
 
 )
+ret_code="$?"
+if [ $ret_code -ne 0 ]; then
+    echo "Error: ${PS4}failed to build!"
+    exit "$ret_code"
+fi
+
 
 # Finally, GCC.
 PS4="[gcc] "
@@ -218,6 +234,12 @@ PS4="[gcc] "
 
     make install-gcc
 )
+ret_code="$?"
+if [ $ret_code -ne 0 ]; then
+    echo "Error: ${PS4}failed to build!"
+    exit "$ret_code"
+fi
+
 
 # Copy in the resource info file from an existing compiler installation.
 PS4="[resource] "
@@ -227,3 +249,11 @@ PS4="[resource] "
     mkdir -p ${INSTALLDIR}/bin
     cp ${XC32DIR}/bin/xc32_device.info ${INSTALLDIR}/bin/xc32_device.info
 )
+ret_code="$?"
+if [ $ret_code -ne 0 ]; then
+    echo "Error: ${PS4}failed to copy!"
+    exit "$ret_code"
+fi
+
+
+echo "Done! Built successfully."
