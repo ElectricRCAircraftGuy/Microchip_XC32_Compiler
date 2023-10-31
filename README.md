@@ -343,6 +343,13 @@ make: *** [Makefile:916: all] Error 2
     sudo make install
     ```
 
+```bash
+# UPDATE: DO THIS INSTEAD! Script straight from Microchip!
+# - takes only 3.5 min. on a really fast machine!
+time ./build-xc32-v4.35.sh
+```
+
+
 
 ## Scratch notes
 
@@ -400,4 +407,5 @@ gcc version 8.3.1 (Microchip XC32 Compiler v4.35)
 ```
 
 https://gist.github.com/kimushu/9d30c2e83a248d1b17c8806fa222354d
+
 

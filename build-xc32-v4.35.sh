@@ -1,17 +1,28 @@
 #!/bin/sh
 
-# Location of XC32 4.35.
+# See: https://stackoverflow.com/a/60157372/4561887
+FULL_PATH_TO_SCRIPT="$(realpath "${BASH_SOURCE[-1]}")"
+SCRIPT_DIRECTORY="$(dirname "$FULL_PATH_TO_SCRIPT")"
+SCRIPT_FILENAME="$(basename "$FULL_PATH_TO_SCRIPT")"
+
+# Location of an already-installed XC32 4.35 installation.
+# - A file is needed from here.
+# - See the `cp ${XC32DIR}/bin/xc32_device.info ${INSTALLDIR}/bin/xc32_device.info` part below.
 XC32DIR=/opt/microchip/xc32/v4.35
 # Where the sources are located.
-SRCDIR=${HOME}/Downloads/src/pic32m-source
+# Default: `SRCDIR=${HOME}/Downloads/src/pic32m-source`
+SRCDIR="$FULL_PATH_TO_SCRIPT/xc32-v4.35-src/pic32m-source"
 # Where to store build artifacts.
-BUILDDIR=${HOME}/Downloads/build/pic32m-build
+# Default: `BUILDDIR=${HOME}/Downloads/build/pic32m-build`
+BUILDDIR="$FULL_PATH_TO_SCRIPT/xc32-v4.35-src/pic32m-build"
 # Where to install the compiler.
-INSTALLDIR=${HOME}/Downloads/build/opt
+# Default: `INSTALLDIR=${HOME}/Downloads/build/opt`
+INSTALLDIR="$FULL_PATH_TO_SCRIPT/xc32-v4.35-src/build/opt"
 
-######################################
-# At this point, you don't need to change anything unless you are
-# customizing.
+# ==================================================================================================
+# Below this point, you don't need to change anything unless you are customizing.
+# ==================================================================================================
+
 libmchp_srcdir=${SRCDIR}/mchp
 expat_srcdir=${SRCDIR}/expat-2.1.1
 binutils_srcdir=${SRCDIR}/binutils
@@ -39,7 +50,7 @@ PS4="[libmchp] "
                  --installdir=${hostinstalldir} \
                  --smart-io-suffixdir=${libmchp_srcdir}
 
-    make -f ${libmchp_srcdir}/Makefile all
+    time make -j$(nproc) -f ${libmchp_srcdir}/Makefile all
     make -f ${libmchp_srcdir}/Makefile install
 )
 
@@ -127,13 +138,13 @@ PS4="[binutils] "
                       CFLAGS=-fcommon \
                       LDFLAGS=-L${hostinstalldir}/lib
 
-    make all \
+    time make -j$(nproc) all \
          CPPFLAGS="-I${hostinstalldir}/include -imacros host-defs.h" \
          CFLAGS=-fcommon \
          LDFLAGS=-L${hostinstalldir}/lib
 
     make install
-    
+
 )
 
 # Finally, GCC.
@@ -200,7 +211,7 @@ PS4="[gcc] "
                  CPPFLAGS="-I${hostinstalldir}/include -imacros host-defs.h" \
                  LDFLAGS=-L${hostinstalldir}/lib
 
-    make all-gcc \
+    time make -j$(nproc) all-gcc \
          STAGE1_LIBS="-lexpat -lmchp -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic" \
          CPPFLAGS="-I${hostinstalldir}/include -imacros host-defs.h" \
          LDFLAGS=-L${hostinstalldir}/lib
