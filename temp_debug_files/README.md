@@ -1,7 +1,9 @@
 
 [`checking size of mp_limb_t... 0` and `configure: error: Oops, mp_limb_t doesn't seem to work` when compiling the Microchip XC32 compiler from source](https://stackoverflow.com/q/77414776/4561887), especially the "**More leads to follow up on**" section at the bottom of the question.
 
-Description of files:
+
+## Description of files:
+
 1. `build-xc32-v4.35m_mod1.sh`
     1. path where it was taken from: `Microchip_XC32_Compiler/build-xc32-v4.35m_mod1.sh`
 1. `build-xc32-v4.35m_mod2.sh`
@@ -13,7 +15,9 @@ Description of files:
 1. `config.log`
     1. path where it was taken from: `Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/gmp/config.log`
 
-Steps:
+
+## Build steps to produce these files:
+
 1. Follow my steps [described in my question here](https://stackoverflow.com/q/77414776/4561887), including installing dependencies in the MSYS2 UCRT64 terminal. 
 1. Instead of running `time ./build-xc32-v4.35m.sh`, however, run this instead:
     ```bash
@@ -76,6 +80,9 @@ Steps:
         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     compilation terminated.
     ```
+
+
+## Conclusions
 
 So, I think the problem is that even though the MSYS2 _terminal_ works ok in Windows with absolute Linux-style paths, the MSYS2 gcc compiler does *not*! So, I should convert all paths to *relative* Linux-style paths in the `build-xc32-v4.35m.sh` script, and then I *think* it'll work. 
 
