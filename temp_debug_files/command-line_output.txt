@@ -1,0 +1,510 @@
+gabriel UCRT64 ~/GS/dev/Microchip_XC32_Compiler
+$ time ./build-xc32-v4.35m_mod.sh
+XC32DIR="/opt/microchip/xc32/v4.35"
+SRCDIR="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source"
+BUILDDIR="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build"
+INSTALLDIR="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35"
+libmchp_srcdir="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/mchp"
+expat_srcdir="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/expat-2.1.1"
+binutils_srcdir="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/binutils"
+gcc_srcdir="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc"
+hostinstalldir="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt"
+libmchp_builddir="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/libmchp"
+expat_builddir="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/expat"
+binutils_builddir="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/binutils"
+gcc_builddir="/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc"
+[gcc] rm -rf /c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc
+[gcc] mkdir -p /c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc
+[gcc] cd /c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc
+[gcc] /c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/configure --target=pic32mx --prefix=/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35 --program-prefix=pic32m- --with-sysroot=/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35/pic32mx --with-bugurl=http://example.com '--with-pkgversion=Microchip XC32 Compiler v4.35 custom' --bindir=/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35/bin/bin --infodir=/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35/share/doc/xc32-pic32m-gcc/info --mandir=/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35/share/doc/xc32-pic32m-gcc/man --libdir=/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35/lib --libexecdir=/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35/bin/bin --with-build-sysroot=/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35/pic32mx --enable-stage1-languages=c --enable-languages=c,c++ --enable-target-optspace --disable-comdat --disable-libstdcxx-pch --disable-libstdcxx-verbose --disable-libssp --disable-libmudflap --disable-libffi --disable-libfortran --disable-bootstrap --disable-shared --disable-nls --disable-gdb --disable-libgomp --disable-threads --disable-tls --disable-sim --disable-decimal-float --disable-libquadmath --disable-shared --disable-checking --disable-maintainer-mode --enable-lto --enable-fixed-point --enable-gofast --enable-static --enable-sgxx-sde-multilibs --enable-sjlj-exceptions --enable-poison-system-directories --enable-obsolete --without-isl --without-cloog --without-headers --with-musl --with-dwarf2 --with-gnu-as --with-gnu-ld '--with-host-libstdcxx=-static-libgcc -static-libstdc++ -Wl,-lstdc++ -lm' 'CPPFLAGS=-I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/include -imacros host-defs.h' LDFLAGS=-L/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/lib
+configure: loading site script /etc/config.site
+checking build system type... x86_64-w64-mingw32
+checking host system type... x86_64-w64-mingw32
+checking target system type... pic32mx-mchp-elf
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether ln works... yes
+checking whether ln -s works... no, using cp -p
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for gawk... gawk
+checking for libatomic support... no
+checking for libitm support... no
+checking for libsanitizer support... no
+checking for libvtv support... no
+checking for libmpx support... no
+checking for libhsail-rt support... no
+checking for gcc... gcc
+checking for C compiler default output file name... a.exe
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables... .exe
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking for g++... g++
+checking whether we are using the GNU C++ compiler... yes
+checking whether g++ accepts -g... yes
+checking whether g++ accepts -static-libstdc++ -static-libgcc... yes
+checking for gnatbind... no
+checking for gnatmake... no
+checking whether compiler driver understands Ada... no
+checking how to compare bootstrapped objects... cmp --ignore-initial=16 $$f1 $$f2
+checking for objdir... .libs
+*** This configuration is not supported in the following subdirectories:
+     target-libquadmath target-libatomic target-libitm target-libsanitizer target-libvtv target-libmpx isl gnattools gotools target-libada target-libhsail-rt target-libgfortran target-libbacktrace target-libgo target-libffi target-libobjc target-libgomp target-liboffloadmic target-libssp
+    (Any other directories should still work fine.)
+checking for default BUILD_CONFIG...
+checking for --enable-vtable-verify... no
+checking for bison... bison -y
+checking for bison... bison
+checking for gm4... no
+checking for gnum4... no
+checking for m4... m4
+checking for flex... flex
+checking for flex... flex
+checking for makeinfo... makeinfo
+checking for expect... expect
+checking for runtest... runtest
+checking for ar... ar
+checking for as... as
+checking for dlltool... dlltool
+checking for ld... (cached) C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe
+checking for lipo... no
+checking for nm... nm
+checking for ranlib... ranlib
+checking for strip... strip
+checking for windres... windres
+checking for windmc... windmc
+checking for objcopy... objcopy
+checking for objdump... objdump
+checking for readelf... readelf
+checking for pic32mx-cc... no
+checking for pic32mx-gcc... no
+checking for pic32mx-c++... no
+checking for pic32mx-g++... no
+checking for pic32mx-cxx... no
+checking for pic32mx-gxx... no
+checking for pic32mx-gcc... no
+checking for pic32mx-gfortran... no
+checking for pic32mx-gccgo... no
+checking for ar... no
+checking for pic32mx-ar... no
+checking for as... no
+checking for pic32mx-as... no
+checking for dlltool... no
+checking for pic32mx-dlltool... no
+checking for ld... no
+checking for pic32mx-ld... no
+checking for lipo... no
+checking for pic32mx-lipo... no
+checking for nm... no
+checking for pic32mx-nm... no
+checking for objcopy... no
+checking for pic32mx-objcopy... no
+checking for objdump... no
+checking for pic32mx-objdump... no
+checking for ranlib... no
+checking for pic32mx-ranlib... no
+checking for readelf... no
+checking for pic32mx-readelf... no
+checking for strip... no
+checking for pic32mx-strip... no
+checking for windres... no
+checking for pic32mx-windres... no
+checking for windmc... no
+checking for pic32mx-windmc... no
+checking where to find the target ar... pre-installed
+checking where to find the target as... pre-installed
+checking where to find the target cc... just compiled
+checking where to find the target c++... just compiled
+checking where to find the target c++ for libstdc++... just compiled
+checking where to find the target dlltool... pre-installed
+checking where to find the target gcc... just compiled
+checking where to find the target gfortran... pre-installed
+checking where to find the target gccgo... pre-installed
+checking where to find the target ld... pre-installed
+checking where to find the target lipo... pre-installed
+checking where to find the target nm... pre-installed
+checking where to find the target objcopy... pre-installed
+checking where to find the target objdump... pre-installed
+checking where to find the target ranlib... pre-installed
+checking where to find the target readelf... pre-installed
+checking where to find the target strip... pre-installed
+checking where to find the target windres... pre-installed
+checking where to find the target windmc... pre-installed
+checking whether to enable maintainer-specific portions of Makefiles... no
+configure: creating ./config.status
+config.status: creating Makefile
+[gcc] make -j1 all-gcc 'STAGE1_LIBS=-lexpat -lmchp -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic' 'CPPFLAGS=-I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/include -imacros host-defs.h' LDFLAGS=-L/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/lib
+mkdir -p -- ./intl
+Configuring in ./intl
+configure: loading site script /etc/config.site
+configure: creating cache ./config.cache
+checking whether make sets $(MAKE)... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether NLS is requested... no
+checking for msgfmt... /ucrt64/bin/msgfmt
+checking for gmsgfmt... /ucrt64/bin/msgfmt
+checking for xgettext... /ucrt64/bin/xgettext
+checking for msgmerge... /ucrt64/bin/msgmerge
+checking for x86_64-w64-mingw32-gcc... gcc
+checking for C compiler default output file name... a.exe
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables... .exe
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking build system type... x86_64-w64-mingw32
+checking host system type... x86_64-w64-mingw32
+checking for x86_64-w64-mingw32-ranlib... ranlib
+checking for library containing strerror... none required
+checking how to run the C preprocessor... gcc -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for ANSI C header files... yes
+checking for an ANSI C-conforming const... yes
+checking for inline... inline
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for off_t... yes
+checking for size_t... yes
+checking for working alloca.h... no
+checking for alloca... yes
+checking for stdlib.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for getpagesize... yes
+checking for working mmap... no
+checking whether we are using the GNU C Library 2.1 or newer... no
+checking whether integer division by zero raises SIGFPE... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unsigned long long... yes
+checking for inttypes.h... yes
+checking whether the inttypes.h PRIxNN macros are broken... no
+checking for ld used by GCC... C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe
+checking if the linker (C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe) is GNU ld... yes
+checking for shared library run path origin... done
+checking argz.h usability... no
+checking argz.h presence... no
+checking for argz.h... no
+checking limits.h usability... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+checking locale.h usability... yes
+checking locale.h presence... yes
+checking for locale.h... yes
+checking nl_types.h usability... no
+checking nl_types.h presence... no
+checking for nl_types.h... no
+checking malloc.h usability... yes
+checking malloc.h presence... yes
+checking for malloc.h... yes
+checking stddef.h usability... yes
+checking stddef.h presence... yes
+checking for stddef.h... yes
+checking for stdlib.h... (cached) yes
+checking for string.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking sys/param.h usability... yes
+checking sys/param.h presence... yes
+checking for sys/param.h... yes
+checking for feof_unlocked... no
+checking for fgets_unlocked... no
+checking for getc_unlocked... no
+checking for getcwd... yes
+checking for getegid... no
+checking for geteuid... no
+checking for getgid... no
+checking for getuid... no
+checking for mempcpy... yes
+checking for munmap... no
+checking for putenv... yes
+checking for setenv... no
+checking for setlocale... yes
+checking for stpcpy... no
+checking for strcasecmp... yes
+checking for strdup... yes
+checking for strtoul... yes
+checking for tsearch... yes
+checking for __argz_count... no
+checking for __argz_stringify... no
+checking for __argz_next... no
+checking for __fsetlocking... no
+checking for iconv... yes
+checking how to link with libiconv... -liconv
+checking for iconv declaration... install-shextern size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
+checking for nl_langinfo and CODESET... no
+checking for LC_MESSAGES... no
+checking for bison... bison
+checking version of bison... 3.8.2, ok
+checking whether NLS is requested... no
+checking whether to use NLS... no
+checking for aclocal... no
+checking for autoconf... autoconf
+checking for autoheader... autoheader
+configure: updating cache ./config.cache
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating config.intl
+config.status: creating config.h
+config.status: executing default-1 commands
+mkdir -p -- ./gmp
+Configuring in ./gmp
+configure: loading site script /etc/config.site
+configure: creating cache ./config.cache
+checking build system type... x86_64-w64-mingw32
+checking host system type... none-w64-mingw32
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for none-w64-mingw32-strip... no
+checking for strip... strip
+configure: WARNING: using cross tools not prefixed with host triplet
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+configure: WARNING: the "none" host is obsolete, use --disable-assembly
+checking ABI=standard
+checking compiler gcc -g -O2 -D__USE_MINGW_ACCESS -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/include -imacros host-defs.h... yes
+checking for none-w64-mingw32-gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.exe
+checking for suffix of executables... .exe
+checking whether we are cross compiling... yes
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking whether gcc understands -c and -o together... yes
+checking for gcc option to accept ISO C99... none needed
+checking for gcc option to accept ISO Standard C... (cached) none needed
+checking how to run the C preprocessor... gcc -E
+checking build system compiler gcc... yes
+checking for build system preprocessor... gcc -E
+checking for build system executable suffix... .exe
+checking whether build system compiler is ANSI... yes
+checking for build system compiler math library... -lm
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+using ABI="standard"
+      CC="gcc"
+      CFLAGS="-g -O2 -D__USE_MINGW_ACCESS -DNO_ASM"
+      CPPFLAGS="-I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/include -imacros host-defs.h"
+      MPN_PATH="generic"
+checking whether assembler supports --noexecstack option... no
+checking for none-w64-mingw32-ar... ar
+checking for BSD- or MS-compatible name lister (nm)... nm
+checking the name lister (nm) interface... BSD nm
+checking for none-w64-mingw32-as... as
+checking for none-w64-mingw32-dlltool... dlltool
+checking for none-w64-mingw32-objdump... objdump
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by gcc... C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe
+checking if the linker (C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe) is GNU ld... yes
+checking whether ln -s works... no, using cp -pR
+checking the maximum length of command line arguments... 8192
+checking how to convert x86_64-w64-mingw32 file names to none-w64-mingw32 format... func_convert_file_msys_to_w32
+checking how to convert x86_64-w64-mingw32 file names to toolchain format... func_convert_file_msys_to_w32
+checking for C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe option to reload object files... -r
+checking for none-w64-mingw32-objdump... (cached) objdump
+checking how to recognize dependent libraries... file_magic ^x86 archive import|^x86 DLL
+checking for none-w64-mingw32-dlltool... (cached) dlltool
+checking how to associate runtime and link libraries... func_cygming_dll_for_implib
+checking for none-w64-mingw32-ar... (cached) ar
+checking for archiver @FILE support... @
+checking for none-w64-mingw32-strip... strip
+checking for none-w64-mingw32-ranlib... ranlib
+checking command to parse nm output from gcc object... ok
+checking for sysroot... /c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35/pic32mx
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for none-w64-mingw32-mt... no
+checking for mt... no
+checking if : is a manifest tool... no
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... no
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -DDLL_EXPORT -DPIC
+checking if gcc PIC flag -DDLL_EXPORT -DPIC works... yes
+checking if gcc static flag -static works... yes
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe) supports shared libraries... yes
+checking dynamic linker characteristics... Win32 ld.exe
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... g++ -E
+checking whether the g++ linker (C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe) supports shared libraries... yes
+checking for g++ option to produce PIC... -DDLL_EXPORT -DPIC
+checking if g++ PIC flag -DDLL_EXPORT -DPIC works... yes
+checking if g++ static flag  works... yes
+checking if g++ supports -c -o file.o... yes
+checking if g++ supports -c -o file.o... (cached) yes
+checking whether the g++ linker (C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/13.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe) supports shared libraries... yes
+checking dynamic linker characteristics... Win32 ld.exe
+checking how to hardcode library paths into programs... immediate
+checking for ANSI C header files... (cached) yes
+checking whether time.h and sys/time.h may both be included... yes
+checking fcntl.h usability... yes
+checking fcntl.h presence... yes
+checking for fcntl.h... yes
+checking float.h usability... yes
+checking float.h presence... yes
+checking for float.h... yes
+checking invent.h usability... no
+checking invent.h presence... no
+checking for invent.h... no
+checking langinfo.h usability... no
+checking langinfo.h presence... no
+checking for langinfo.h... no
+checking locale.h usability... yes
+checking locale.h presence... yes
+checking for locale.h... yes
+checking nl_types.h usability... no
+checking nl_types.h presence... no
+checking for nl_types.h... no
+checking sys/attributes.h usability... no
+checking sys/attributes.h presence... no
+checking for sys/attributes.h... no
+checking sys/iograph.h usability... no
+checking sys/iograph.h presence... no
+checking for sys/iograph.h... no
+checking sys/mman.h usability... no
+checking sys/mman.h presence... no
+checking for sys/mman.h... no
+checking sys/param.h usability... yes
+checking sys/param.h presence... yes
+checking for sys/param.h... yes
+checking sys/processor.h usability... no
+checking sys/processor.h presence... no
+checking for sys/processor.h... no
+checking sys/pstat.h usability... no
+checking sys/pstat.h presence... no
+checking for sys/pstat.h... no
+checking sys/sysinfo.h usability... no
+checking sys/sysinfo.h presence... no
+checking for sys/sysinfo.h... no
+checking sys/syssgi.h usability... no
+checking sys/syssgi.h presence... no
+checking for sys/syssgi.h... no
+checking sys/systemcfg.h usability... no
+checking sys/systemcfg.h presence... no
+checking for sys/systemcfg.h... no
+checking sys/time.h usability... yes
+checking sys/time.h presence... yes
+checking for sys/time.h... yes
+checking sys/times.h usability... no
+checking sys/times.h presence... no
+checking for sys/times.h... no
+checking for sys/resource.h... no
+checking for sys/sysctl.h... no
+checking for machine/hal_sysinfo.h... no
+checking whether fgetc is declared... yes
+checking whether fscanf is declared... yes
+checking whether optarg is declared... yes
+checking whether ungetc is declared... yes
+checking whether vfprintf is declared... yes
+checking whether sys_errlist is declared... no
+checking whether sys_nerr is declared... no
+checking return type of signal handlers... void
+checking for intmax_t... yes
+checking for long double... yes
+checking for long long... yes
+checking for ptrdiff_t... yes
+checking for quad_t... no
+checking for uint_least32_t... yes
+checking for intptr_t... yes
+checking for working volatile... yes
+checking for C/C++ restrict keyword... __restrict
+checking whether gcc __attribute__ ((const)) works... yes
+checking whether gcc __attribute__ ((malloc)) works... yes
+checking whether gcc __attribute__ ((mode (XX))) works... yes
+checking whether gcc __attribute__ ((noreturn)) works... yes
+checking whether gcc hidden aliases work... yes
+checking for inline... inline
+checking for cos in -lm... yes
+checking for working alloca.h... no
+checking for alloca (via gmp-impl.h)... no
+checking how to allocate temporary memory... malloc-reentrant
+configure: WARNING: gmp.h doesnt recognise <stdio.h>, FILE prototypes will be unavailable
+checking whether byte ordering is bigendian... no
+checking format of `double' floating point... IEEE little endian
+checking for alarm... yes
+checking for attr_get... no
+checking for clock... yes
+checking for cputime... no
+checking for getpagesize... yes
+checking for getrusage... no
+checking for gettimeofday... yes
+checking for getsysinfo... no
+checking for localeconv... yes
+checking for memset... yes
+checking for mmap... no
+checking for mprotect... yes
+checking for nl_langinfo... no
+checking for obstack_vprintf... no
+checking for popen... yes
+checking for processor_info... no
+checking for pstat_getprocessor... no
+checking for raise... yes
+checking for read_real_time... no
+checking for sigaction... no
+checking for sigaltstack... no
+checking for sigstack... no
+checking for syssgi... no
+checking for strchr... yes
+checking for strerror... yes
+checking for strnlen... yes
+checking for strtol... yes
+checking for strtoul... yes
+checking for sysconf... no
+checking for sysctl... no
+checking for sysctlbyname... no
+checking for times... no
+checking for library containing clock_gettime... none required
+checking for vsnprintf... yes
+checking whether vsnprintf works... probably
+configure: WARNING: cannot check for properly working vsnprintf when cross compiling, will assume it's ok
+checking whether sscanf needs writable input... no
+checking for struct pst_processor.psp_iticksperclktick... no
+checking size of void *... 8
+checking size of unsigned short... 2
+checking size of unsigned... 4
+checking size of unsigned long... 4
+checking size of mp_limb_t... 0
+configure: error: Oops, mp_limb_t doesn't seem to work
+make: *** [Makefile:4701: configure-gmp] Error 1
+
+real    4m28.430s
+user    0m2.336s
+sys     0m35.019s
+Error: [gcc] failed to build!
+
+real    5m34.277s
+user    0m3.384s
+sys     0m48.284s
