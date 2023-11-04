@@ -414,3 +414,511 @@ gcc version 8.3.1 (Microchip XC32 Compiler v4.35)
 https://gist.github.com/kimushu/9d30c2e83a248d1b17c8806fa222354d
 
 
+========================
+
+Windows build instructions:
+
+Install MSYS2: https://stackoverflow.com/a/77407282/4561887
+
+Install Git Bash
+
+```bash
+# In a Git Bash terminal, clone the repo
+# - takes 7~8 minutes on a really fast computer and internet connection
+time git clone https://github.com/ElectricRCAircraftGuy/Microchip_XC32_Compiler.git
+
+
+# In an MSYS UCRT64 terminal, cd into the repo and run the build script
+
+cd path/to/Microchip_XC32_Compiler
+
+gcc --version  # fails
+
+# install build tools
+# Read this page here: https://www.msys2.org/
+# - takes ~1 min.
+time pacman -S mingw-w64-ucrt-x86_64-gcc
+
+# gcc --version now shows this:
+$ gcc --version
+gcc.exe (Rev2, Built by MSYS2 project) 13.2.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+# install make
+time pacman -S make
+
+# try to build; it works!??????
+# - takes ~xx min.
+time ./build-xc32-v4.35m.sh
+
+
+
+# failed after 7m19 sec. 
+  $restore $backupdir/* `echo "./bfd.info" | sed 's|[^/]*$||'`; \
+fi; \
+rm -rf $backupdir; exit $rc
+/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/binutils/missing: line 81: makeinfo: command not found
+WARNING: 'makeinfo' is missing on your system.
+         You should only need it if you modified a '.texi' file, or
+         any other file indirectly affecting the aspect of the manual.
+         You might want to install the Texinfo package:
+         <http://www.gnu.org/software/texinfo/>
+         The spurious makeinfo call might also be the consequence of
+         using a buggy 'make' (AIX, DU, IRIX), in which case you might
+         want to install GNU make:
+         <http://www.gnu.org/software/make/>
+make[3]: *** [Makefile:541: bfd.info] Error 127
+make[3]: Leaving directory '/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/binutils/bfd/doc'
+make[2]: *** [Makefile:1642: info-recursive] Error 1
+make[2]: Leaving directory '/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/binutils/bfd'
+make[1]: *** [Makefile:2707: all-bfd] Error 2
+make[1]: Leaving directory '/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/binutils'
+make: *** [Makefile:865: all] Error 2
+
+real    5m11.693s
+user    0m15.065s
+sys     2m24.404s
+Error: [binutils] failed to build!
+
+real    7m19.054s
+user    0m18.238s
+sys     2m49.267s
+
+# try installing this
+pacman -S binutils
+# still no `makeinfo --help` cmd
+
+pacman -S texinfo
+# good! `makeinfo --help` works now!
+
+# try again
+time ./build-xc32-v4.35m.sh
+
+# failed to build binutils; needs bison
+
+# install bison
+pacman -S bison
+
+# try again
+time ./build-xc32-v4.35m.sh
+
+# Install dependencies
+
+pacman -Ss autoconf
+pacman -Ss autogen
+pacman -Ss bison
+pacman -Ss dejagnu
+pacman -Ss flex
+pacman -Ss gawk
+pacman -Ss gperf
+pacman -Ss gzip
+
+pacman -Ss nsis
+pacman -Ss openssh-client
+pacman -Ss p7zip-full
+pacman -Ss perl
+pacman -Ss libisl-dev
+pacman -Ss scons
+pacman -Ss tcl
+pacman -Ss texinfo
+pacman -Ss tofrodos
+pacman -Ss wget
+pacman -Ss zip
+pacman -Ss texlive
+pacman -Ss texlive-extra-utils
+
+package_list=(
+    "autoconf"
+    "autogen"
+    "bison"
+    "dejagnu"
+    "flex"
+    "gawk"
+    "gperf"
+    "gzip"
+    "nsis"
+    "openssh-client"
+    "p7zip-full"
+    "perl"
+    "libisl-dev"
+    "scons"
+    "tcl"
+    "texinfo"
+    "tofrodos"
+    "wget"
+    "zip"
+    "texlive"
+    "texlive-extra-utils"
+)
+
+for package in "${package_list[@]}"; do
+    if pacman -Ss $package > /dev/null; then
+        echo "$package exists."
+    else
+        echo "$package does not exist."
+    fi
+done
+
+# ============= DO THIS TO INSTALL ALL DEPENDENCIES AT ONCE! =============
+# UCRT64
+if [ "$MSYSTEM" != "UCRT64" ]; then
+    echo "ERROR: You must run this script in an MSYS2 ucrt64 terminal!"
+    exit 1
+fi
+package_list=(
+    "mingw-w64-ucrt-x86_64-gcc" # specific version for MSYS2 ucrt64
+    "mingw-w64-ucrt-x86_64-gmp" # specific version for MSYS2 ucrt64
+    "gmp"
+    "make"
+    "binutils"
+    "autoconf"
+    "autogen"
+    "bison"
+    "dejagnu"
+    "flex"
+    "gawk"
+    "gperf"
+    "gzip"
+    # "nsis" # generic; must be specific; hence the line below
+    "mingw-w64-ucrt-x86_64-nsis" # specific version for MSYS2 ucrt64
+    "perl"
+    "scons"
+    "tcl"
+    "texinfo"
+    "wget"
+    "zip"
+    # "texlive" # generic; must be specific; hence the line below
+    "mingw-w64-ucrt-x86_64-texlive-core" # specific version for MSYS2 ucrt64
+    # "texlive-extra-utils" # generic; must be specific; hence the line below
+    "mingw-w64-ucrt-x86_64-texlive-extra-utils" # specific version for MSYS2 ucrt64
+)
+
+# Only install packages if tHey are NOT already installed. 
+for package in "${package_list[@]}"; do
+    if ! pacman -Qs $package > /dev/null; then
+        echo -e "\n=== $package is not installed. Installing... ==="
+        pacman -S --noconfirm $package
+    else
+        echo -e "\n=== $package is already installed. ==="
+    fi
+done
+echo -e "\n=== Done installing packages! ===\n"
+
+# 16 minutes in:
+# binutils passed! But gcc failed to build :(
+checking for processor_info... no
+checking for pstat_getprocessor... no
+checking for raise... yes
+checking for read_real_time... no
+checking for sigaction... no
+checking for sigaltstack... no
+checking for sigstack... no
+checking for syssgi... no
+checking for strchr... yes
+checking for strerror... yes
+checking for strnlen... yes
+checking for strtol... yes
+checking for strtoul... yes
+checking for sysconf... no
+checking for sysctl... no
+checking for sysctlbyname... no
+checking for times... no
+checking for library containing clock_gettime... none required
+checking for vsnprintf... yes
+checking whether vsnprintf works... probably
+configure: WARNING: cannot check for properly working vsnprintf when cross compiling, will assume it's ok
+checking whether sscanf needs writable input... no
+checking for struct pst_processor.psp_iticksperclktick... no
+checking size of void *... 8
+checking size of unsigned short... 2
+checking size of unsigned... 4
+checking size of unsigned long... 4
+checking size of mp_limb_t... 0                  <=============== ITS SIZE IS 0!
+configure: error: Oops, mp_limb_t doesn't seem to work
+make: *** [Makefile:4701: configure-gmp] Error 1
+
+real    2m54.851s
+user    0m7.225s
+sys     1m10.362s
+Error: [gcc] failed to build!
+
+real    2m57.085s
+user    0m7.225s
+sys     1m10.499s
+
+# Let's try adding this to the gcc configure command!:
+--build=x86_64-w64-mingw64 \
+
+# trying again...
+# NO CHANGE! SAME PROBLEM!
+
+# But...running this manually *passed* that step!
+UCRT64 ~/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/gmp
+$ ../../../pic32m-source/gmp-6.1.0/configure
+
+# try the quote in this answer here: https://stackoverflow.com/a/33875619/4561887
+--build=x86_64-w64-mingw32 \
+# Nah...that's the default! Just remove it. 
+
+############
+
+# Try building in the MSYS2 mingw64 terminal instead of the UCRT64 terminal
+
+# ============= DO THIS TO INSTALL ALL DEPENDENCIES AT ONCE! =============
+# mingw64
+if [ "$MSYSTEM" != "MINGW64" ]; then
+    echo "ERROR: You must run this script in an MSYS2 mingw64 terminal!"
+    exit 1
+fi
+package_list=(
+    "mingw-w64-x86_64-gcc" # specific version for MSYS2 mingw64
+    "mingw-w64-x86_64-gmp" # specific version for MSYS2 mingw64
+    "gmp"
+    "make"
+    "binutils"
+    "autoconf"
+    "autogen"
+    "bison"
+    "dejagnu"
+    "flex"
+    "gawk"
+    "gperf"
+    "gzip"
+    # "nsis" # generic; must be specific; hence the line below
+    "mingw-w64-x86_64-nsis" # specific version for MSYS2 mingw64
+    "perl"
+    "scons"
+    "tcl"
+    "texinfo"
+    "wget"
+    "zip"
+    # "texlive" # generic; must be specific; hence the line below
+    "mingw-w64-x86_64-texlive-core" # specific version for MSYS2 mingw64
+    # "texlive-extra-utils" # generic; must be specific; hence the line below
+    "mingw-w64-x86_64-texlive-extra-utils" # specific version for MSYS2 mingw64
+)
+
+# Only install packages if tHey are NOT already installed. 
+for package in "${package_list[@]}"; do
+    if ! pacman -Qs $package > /dev/null; then
+        echo -e "\n=== $package is not installed. Installing... ==="
+        pacman -S --noconfirm $package
+    else
+        echo -e "\n=== $package is already installed. ==="
+    fi
+done
+echo -e "\n=== Done installing packages! ===\n"
+
+
+# No change when building for `--build=x86_64-w64-mingw32`
+# in the MINGW64 environment! Same error as before: 
+checking for mprotect... yes
+checking for nl_langinfo... no
+checking for obstack_vprintf... no
+checking for popen... yes
+checking for processor_info... no
+checking for pstat_getprocessor... no
+checking for raise... yes
+checking for read_real_time... no
+checking for sigaction... no
+checking for sigaltstack... no
+checking for sigstack... no
+checking for syssgi... no
+checking for strchr... yes
+checking for strerror... yes
+checking for strnlen... yes
+checking for strtol... yes
+checking for strtoul... yes
+checking for sysconf... no
+checking for sysctl... no
+checking for sysctlbyname... no
+checking for times... no
+checking for library containing clock_gettime... none required
+checking for vsnprintf... yes
+checking whether vsnprintf works... probably
+configure: WARNING: cannot check for properly working vsnprintf when cross compiling, will assume it's ok
+checking whether sscanf needs writable input... no
+checking for struct pst_processor.psp_iticksperclktick... no
+checking size of void *... 8
+checking size of unsigned short... 2
+checking size of unsigned... 4
+checking size of unsigned long... 4
+checking size of mp_limb_t... 0
+configure: error: Oops, mp_limb_t doesn't seem to work
+make: *** [Makefile:4701: configure-gmp] Error 1
+
+real    2m48.255s
+user    0m4.447s
+sys     0m46.481s
+Error: [gcc] failed to build!
+
+real    2m48.486s
+user    0m4.462s
+sys     0m46.511s
+
+# So, let's go back to the UCRT64 environment and try installing the 
+# GMP 6.1.0 library from source, then try building again!
+# Look for bugs & stuff: 
+# 
+# https://gmplib.org/#DOWNLOAD
+# 
+mkdir ~/Downloads/Install_Files/GMP
+cd ~/Downloads/Install_Files/GMP
+wget https://gmplib.org/download/gmp/gmp-6.1.2.tar.xz
+tar -xvf gmp-6.1.2.tar.xz
+cd gmp-6.1.2
+mkdir build
+cd build
+time ../configure --build=x86_64-w64-mingw32
+time make -j$(nproc)
+time make check
+# sudo make install
+
+# At the end of `time ../configure`, you'll see this:
+config.status: linking ../mpn/x86_64/aorrlsh2_n.asm to mpn/rsblsh2_n.asm
+config.status: linking ../mpn/x86_64/k8/aorrlsh_n.asm to mpn/addlsh_n.asm
+config.status: linking ../mpn/x86_64/k8/aorrlsh_n.asm to mpn/rsblsh_n.asm
+config.status: linking ../mpn/generic/add_n_sub_n.c to mpn/add_n_sub_n.c
+config.status: linking ../mpn/x86_64/k8/gmp-mparam.h to gmp-mparam.h
+config.status: executing libtool commands
+configure: summary of build options:
+
+  Version:           GNU MP 6.1.2
+  Host type:         x86_64-w64-mingw32
+  ABI:               64
+  Install prefix:    /ucrt64
+  Compiler:          gcc
+  Static libraries:  yes
+  Shared libraries:  no
+
+
+real    5m3.385s
+user    0m4.486s
+sys     0m34.609s
+
+# make fails! Some problem with "C:/Program" not being found.
+# UGH! Found it. It was my stupid alias hack in my ~/.bashrc file. I commented 
+# it out:
+#
+# # alias make="'/c/Program Files/Microchip/MPLABX/v6.10/gnuBins/GnuWin32/bin/make.exe'"
+time make -j$(nproc)
+
+# I deleted the entire Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build dir and the output install dir, and am trying again now from scratch, this time with the right version of `make`, in the UCRT64 environment.
+# Here are my detected `--build` and `--host` system types:
+checking build system type... x86_64-w64-mingw32
+checking host system type... x86_64-w64-mingw32
+
+# I still get the same error when configuring gmp:
+checking for sigaction... no
+checking for sigaltstack... no
+checking for sigstack... no
+checking for syssgi... no
+checking for strchr... yes
+checking for strerror... yes
+checking for strnlen... yes
+checking for strtol... yes
+checking for strtoul... yes
+checking for sysconf... no
+checking for sysctl... no
+checking for sysctlbyname... no
+checking for times... no
+checking for library containing clock_gettime... none required
+checking for vsnprintf... yes
+checking whether vsnprintf works... probably
+configure: WARNING: cannot check for properly working vsnprintf when cross compiling, will assume it's ok
+checking whether sscanf needs writable input... no
+checking for struct pst_processor.psp_iticksperclktick... no
+checking size of void *... 8
+checking size of unsigned short... 2
+checking size of unsigned... 4
+checking size of unsigned long... 4
+checking size of mp_limb_t... 0
+configure: error: Oops, mp_limb_t doesn't seem to work
+make: *** [Makefile:4701: configure-gmp] Error 1
+
+real    2m45.026s
+user    0m0.137s
+sys     0m2.398s
+Error: [gcc] failed to build!
+
+real    2m45.212s
+user    0m0.137s
+sys     0m2.413s
+
+# possibly helpful:
+# 1. https://www.google.com/search?q=checking+size+of+mp_limb_t...+0+configure%3A+error%3A+Oops%2C+mp_limb_t+doesn%27t+seem+to+work&oq=checking+size+of+mp_limb_t...+0+configure%3A+error%3A+Oops%2C+mp_limb_t+doesn%27t+seem+to+work&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBBzY3OGowajeoAgCwAgA&sourceid=chrome&ie=UTF-8
+# 1. https://github.com/JuliaLang/julia/issues/13206
+#   1. https://github.com/JuliaLang/julia/issues/13206#issuecomment-141453337
+
+# I think I found the problem!:
+C:\Users\gabriel\GS\dev\Microchip_XC32_Compiler\xc32-v4.35-src\pic32m-build\gcc\gmp\config.log
+# It shows:
+configure:27426: checking size of mp_limb_t
+configure:27431: gcc -c -g -O2 -D__USE_MINGW_ACCESS -DNO_ASM -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/include -imacros host-defs.h conftest.c >&5
+conftest.c:80:10: fatal error: /c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/gmp/gmp-h.in: No such file or directory
+   80 | #include "/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/gmp/gmp-h.in"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+# Notice this!:
+fatal error: /c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/gmp/gmp-h.in: No such file or directory
+
+# I think it's a Windows symlink problem, since the gcc\gmp dir is a symlink to the gmp dir up one level!
+
+# I'm going to try copying the gmp dir into the gcc dir and see if that fixes it. I should probably write a program that recreates symlinks in Windows, or something. Windows is dumb.
+
+# This is useful
+find . -type l | grep -vE 'pic32.*-build|\/installed\/' | sort -V
+
+# ==> I put a comment here too: https://github.com/JuliaLang/julia/issues/13206#issuecomment-1791823912
+
+pacman -S mingw-w64-ucrt-x86_64-gmp
+pacman -S gmp
+
+# add:
+--build=x86_64-w64-mingw32 \
+--host=x86_64-w64-mingw32 \
+
+cp /c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/gmp/gmp-h.in /c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/include
+
+# in: C:\Users\gabriel\GS\dev\Microchip_XC32_Compiler\xc32-v4.35-src\pic32m-source\gcc\gmp\configure:
+#
+// #include "$srcdir/gmp-h.in"
+#include "C:\Users\gabriel\GS\dev\Microchip_XC32_Compiler\xc32-v4.35-src\pic32m-source\gcc\gmp\gmp-h.in"
+
+in aclocal.m4 and acinclude.m4: 
+"C:\Users\gabriel\GS\dev\Microchip_XC32_Compiler\xc32-v4.35-src\pic32m-source\gcc\gmp\gmp-h.in"
+
+finish the manual gmp install from source, and try again
+
+../../pic32m-source/gcc/gmp
+
+# I got pastthe gmp configure error I was on forever! This line is my fix inside `C:\Users\gabriel\GS\dev\Microchip_XC32_Compiler\xc32-v4.35-src\pic32m-build\gcc\Makefile`: make the path **relative**:
+--srcdir="../../../pic32m-source/gcc/gmp" \
+
+# NEXT:
+# 1. [x] examine the original Microchip build script and see if it uses absolute or relative paths, and where; fix my script to follow suit. I may be going off in the wrong direction here accidentally having used absolute instead of relative paths. 
+#   I checked: they use absolute too. 
+# 1. [ ] try to add the `realpath --relative-to=` thing to the build script itself, to convert all absolute paths to relative, where needed!
+# 1. [ ] Consider adding -I includes to the CPPFLAGS in the GCC build section of the script, to make sure it can find the gmp-h.in and other files.
+# 1. [ ] UNDO THE Windows path thing I did, since I think it broke stuff (save it in a temp dir somewhere in the repo). 
+# 1. [ ] make the absolute to relative path fix permanent in the build script somehow
+    See: 
+    ```bash
+    /Microchip_XC32_Compiler
+    $ /c/ProgramData/chocolatey/bin/rg -ilF 'topdir=$(srcdir)'
+    ```
+
+    Probably just forcefully edit it in the Makefile after generating it, by using 
+        --srcdir=`realpath --relative-to="$(HOST_SUBDIR)/gmp" "$${topdir}/$$module_srcdir"` \
+    instead of 
+        --srcdir=$${topdir}/$$module_srcdir \
+
+
+
+
+
+
+```
