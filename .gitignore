@@ -1,5 +1,6 @@
 
 /temp/
+/resources_from_Microchip/temp/
 
 # User build dirs
 xc32-v4.35-src/pic32c-build
