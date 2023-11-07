@@ -16,7 +16,7 @@ SRCDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/pic32m-source"
 BUILDDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/pic32m-build"
 # Where to install the compiler.
 # Default: `INSTALLDIR=${HOME}/Downloads/build/opt`
-INSTALLDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/installed/opt"
+INSTALLDIR="$SCRIPT_DIRECTORY/xc32-v4.35-src/installed/opt/microchip/xc32_custom/v4.35"
 
 # ==================================================================================================
 # Below this point, you don't need to change anything unless you are customizing.
@@ -35,6 +35,22 @@ libmchp_builddir=${BUILDDIR}/libmchp
 expat_builddir=${BUILDDIR}/expat
 binutils_builddir=${BUILDDIR}/binutils
 gcc_builddir=${BUILDDIR}/gcc
+
+# Debugging:
+echo "XC32DIR=\"${XC32DIR}\""
+echo "SRCDIR=\"${SRCDIR}\""
+echo "BUILDDIR=\"${BUILDDIR}\""
+echo "INSTALLDIR=\"${INSTALLDIR}\""
+echo "libmchp_srcdir=\"${libmchp_srcdir}\""
+echo "expat_srcdir=\"${expat_srcdir}\""
+echo "binutils_srcdir=\"${binutils_srcdir}\""
+echo "gcc_srcdir=\"${gcc_srcdir}\""
+echo "hostinstalldir=\"${hostinstalldir}\""
+echo "libmchp_builddir=\"${libmchp_builddir}\""
+echo "expat_builddir=\"${expat_builddir}\""
+echo "binutils_builddir=\"${binutils_builddir}\""
+echo "gcc_builddir=\"${gcc_builddir}\""
+sleep 2  # give user a chance to look at the output above
 
 # # First, build libmchp.
 # PS4="[libmchp] "
@@ -172,33 +188,19 @@ PS4="[gcc] "
     mkdir -p ${gcc_builddir}
     cd ${gcc_builddir}
 
-    # Obtain relative paths, since Windows doesn't like absolute paths due to Windows/Linux path
-    # differences.
-    INSTALLDIR_RELATIVE=$(realpath --relative-to="." "${INSTALLDIR}")
-    hostinstalldir_RELATIVE=$(realpath --relative-to="." "${hostinstalldir}")
-    gcc_srcdir_RELATIVE=$(realpath --relative-to="." "${gcc_srcdir}")
-    # debugging:
-    echo ""
-    echo "INSTALLDIR = ${INSTALLDIR}"
-    echo "hostinstalldir = ${hostinstalldir}"
-    echo "INSTALLDIR_RELATIVE = ${INSTALLDIR_RELATIVE}"
-    echo "hostinstalldir_RELATIVE = ${hostinstalldir_RELATIVE}"
-    echo ""
-    sleep 3
-
-    ${gcc_srcdir_RELATIVE}/configure \
+    ${gcc_srcdir}/configure \
                  --target=pic32mx \
                  --prefix=${INSTALLDIR} \
                  --program-prefix=pic32m- \
-                 --with-sysroot=${INSTALLDIR_RELATIVE}/pic32mx \
+                 --with-sysroot=${INSTALLDIR}/pic32mx \
                  --with-bugurl=http://example.com \
                  --with-pkgversion="Microchip XC32 Compiler v4.35 custom" \
-                 --bindir=${INSTALLDIR_RELATIVE}/bin/bin \
-                 --infodir=${INSTALLDIR_RELATIVE}/share/doc/xc32-pic32m-gcc/info \
-                 --mandir=${INSTALLDIR_RELATIVE}/share/doc/xc32-pic32m-gcc/man \
-                 --libdir=${INSTALLDIR_RELATIVE}/lib \
-                 --libexecdir=${INSTALLDIR_RELATIVE}/bin/bin \
-                 --with-build-sysroot=${INSTALLDIR_RELATIVE}/pic32mx \
+                 --bindir=${INSTALLDIR}/bin/bin \
+                 --infodir=${INSTALLDIR}/share/doc/xc32-pic32m-gcc/info \
+                 --mandir=${INSTALLDIR}/share/doc/xc32-pic32m-gcc/man \
+                 --libdir=${INSTALLDIR}/lib \
+                 --libexecdir=${INSTALLDIR}/bin/bin \
+                 --with-build-sysroot=${INSTALLDIR}/pic32mx \
                  --enable-stage1-languages=c \
                  --enable-languages=c,c++ \
                  --enable-target-optspace \
@@ -238,13 +240,13 @@ PS4="[gcc] "
                  --with-gnu-as \
                  --with-gnu-ld \
                  '--with-host-libstdcxx=-static-libgcc -static-libstdc++ -Wl,-lstdc++ -lm' \
-                 CPPFLAGS="-I${hostinstalldir_RELATIVE}/include -imacros host-defs.h" \
-                 LDFLAGS=-L${hostinstalldir_RELATIVE}/lib
+                 CPPFLAGS="-I${hostinstalldir}/include -imacros host-defs.h" \
+                 LDFLAGS=-L${hostinstalldir}/lib
 
-    time make -j$(nproc) all-gcc \
+    time make -j1 all-gcc \
          STAGE1_LIBS="-lexpat -lmchp -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic" \
-         CPPFLAGS="-I${hostinstalldir_RELATIVE}/include -imacros host-defs.h" \
-         LDFLAGS=-L${hostinstalldir_RELATIVE}/lib
+         CPPFLAGS="-I${hostinstalldir}/include -imacros host-defs.h" \
+         LDFLAGS=-L${hostinstalldir}/lib
 
     make install-gcc
 )

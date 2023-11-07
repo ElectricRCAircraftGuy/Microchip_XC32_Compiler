@@ -1106,8 +1106,55 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 # The final Windows fixes/manual file changes:
 
-1. 
+1. Enable Windows symlinks, per my instructions here: https://stackoverflow.com/q/77414776/4561887
 
+    I do NOT think this is then necessary, but I also ran my script: `windows_replace_all_symlinks.sh`
+
+1. `xc32-v4.35-src/pic32m-source/gcc/gcc/config/pic32m/mchp.c`
+
+    Line 5582: change from:
+    ```c
+      len_this_default_name = sprintf(this_default_name,"*_%8.8lx%lx",
+                                      (unsigned long) decl, current_time);
+    ```
+
+    To:
+    ```c
+    #include <stdint.h>  // put this at the top
+
+      len_this_default_name = sprintf(this_default_name,"*_%8.8lx%lx",
+                                      (uintptr_t) decl, current_time);
+    ```
+
+1. `xc32-v4.35-src/pic32m-source/gcc/gcc/system.h'`
+
+    Line 737: from:
+    ```c
+    #define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__)
+    ```
+
+    To (just comment this out):
+    ```c
+    /* #define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__) */
+    ```
+
+    See my answer: https://stackoverflow.com/a/77435824/4561887
+
+1. `'xc32-v4.35-src/pic32m-source/gmp-6.1.0/acinclude.m4'`
+
+    I do NOT think you need to do this. So do NOT do it unless the build fails without it! But, here's what I did:
+
+    Lines 139 and 3566 (just fix the path, mind the square brackets to keep them as-is on each line): 
+
+    From: 
+    ```c
+    [#include "$srcdir/gmp-h.in"]
+    ```
+
+    To:
+    ```c
+    [#include "C:\Users\gabriel\GS\dev\Microchip_XC32_Compiler\xc32-v4.35-src\pic32m-source\gcc\gmp\gmp-h.in"]
+    ```
 
 
 # TODO:
