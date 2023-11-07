@@ -901,8 +901,8 @@ finish the manual gmp install from source, and try again
 # NEXT:
 # 1. [x] examine the original Microchip build script and see if it uses absolute or relative paths, and where; fix my script to follow suit. I may be going off in the wrong direction here accidentally having used absolute instead of relative paths. 
 #   I checked: they use absolute too. 
-# 1. [ ] try to add the `realpath --relative-to=` thing to the build script itself, to convert all absolute paths to relative, where needed!
-# 1. [ ] Consider adding -I includes to the CPPFLAGS in the GCC build section of the script, to make sure it can find the gmp-h.in and other files.
+# 1. [x] try to add the `realpath --relative-to=` thing to the build script itself, to convert all absolute paths to relative, where needed!
+# 1. [no] Consider adding -I includes to the CPPFLAGS in the GCC build section of the script, to make sure it can find the gmp-h.in and other files.
 # 1. [ ] UNDO THE Windows path thing I did, since I think it broke stuff (save it in a temp dir somewhere in the repo). 
 # 1. [ ] make the absolute to relative path fix permanent in the build script somehow
     See: 
@@ -918,7 +918,228 @@ finish the manual gmp install from source, and try again
 
 
 
+# -------[WORKED]--------
+# trying to build on Windows now with this file: 
+time ./build-xc32-v4.35m_relative_paths.sh
+
+# IT GOT PAST THE GMP ERRORS! The fix was this to the build script:
+    gcc_srcdir_RELATIVE=$(realpath --relative-to="." "${gcc_srcdir}")
+    # ...
+    ${gcc_srcdir_RELATIVE}/configure \ 
+    # ...
+
+# IMPORTANT (MAYBE???) I had done this too. Was this mistakenly part of the fix? I'll find out later when I try to build it again!
+# In `xc32-v4.35-src/pic32m-source/gmp-6.1.0/acinclude.m4`, I made these changes manually too (changing just the `gmp-h.in` include in two places): 
+$ git diff 'xc32-v4.35-src/pic32m-source/gmp-6.1.0/acinclude.m4'
+diff --git a/xc32-v4.35-src/pic32m-source/gmp-6.1.0/acinclude.m4 b/xc32-v4.35-src/pic32m-source/gmp-6.1.0/acinclude.m4
+index f6e8940ac..ec06c2af1 100644
+--- a/xc32-v4.35-src/pic32m-source/gmp-6.1.0/acinclude.m4
++++ b/xc32-v4.35-src/pic32m-source/gmp-6.1.0/acinclude.m4
+@@ -136,7 +136,7 @@ define(GMP_INCLUDE_GMP_H,
+ #define GMP_NAIL_BITS $GMP_NAIL_BITS
+ #define GMP_LIMB_BITS 123
+ $DEFN_LONG_LONG_LIMB
+-#include "$srcdir/gmp-h.in"]
++#include "C:\Users\gabriel\GS\dev\Microchip_XC32_Compiler\xc32-v4.35-src\pic32m-source\gcc\gmp\gmp-h.in"]
+ ])
+
+
+@@ -3563,7 +3563,7 @@ AC_CACHE_CHECK([for alloca (via gmp-impl.h)],
+                gmp_cv_func_alloca,
+ [AC_TRY_LINK(
+ GMP_INCLUDE_GMP_H
+-[#include "$srcdir/gmp-impl.h"
++[#include "C:\Users\gabriel\GS\dev\Microchip_XC32_Compiler\xc32-v4.35-src\pic32m-source\gcc\gmp\gmp-h.in"
+ ],
+   [char *p = (char *) alloca (1);],
+   gmp_cv_func_alloca=yes,
+
+
+
+
+# New compile error ~24 min. into building just gcc! (the stuff before gcc in the build script was already successfully built):
+      |               ^~~~~
+../../../pic32m-source/gcc/gcc/config/pic32m/mchp.c: In function 'const char* default_section_name(tree, uint64_t)':
+../../../pic32m-source/gcc/gcc/config/pic32m/mchp.c:5583:39: error: cast from 'tree' {aka 'tree_node*'} to 'long unsigned int' loses precision [-fpermissive]
+ 5583 |                                       (unsigned long) decl, current_time);
+      |                                       ^~~~~~~~~~~~~~~~~~~~
+
+# -------[WORKED]--------
+# solution (I think): in mchp.c (2 files: one for m and one for c chip type): cast ptr to `uintptr_t` instead of to `unsigned long`:
+
+#include <stdint.h>
+      len_this_default_name = sprintf(this_default_name,"*_%8.8lx%lx",
+                                      (uintptr_t) decl, current_time);
+
+# Note my gcc version on Windows in MSYS2 UCRT64 terminal:
+$ gcc --version
+gcc.exe (Rev2, Built by MSYS2 project) 13.2.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+# New error:
+# Compile command:
+g++ -fno-PIE -c  -DPREFIX=\"/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt\" -DBASEVER="\"8.3.1\"" -g -O2 -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE   -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H -I. -I. -I../../../pic32m-source/gcc/gcc -I../../../pic32m-source/gcc/gcc/. -I../../../pic32m-source/gcc/gcc/../include -I../../../pic32m-source/gcc/gcc/../libcpp/include -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/./gmp -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/gmp -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/./mpfr/src -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/mpfr/src -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/mpc/src  -I../../../pic32m-source/gcc/gcc/../libdecnumber -I../../../pic32m-source/gcc/gcc/../libdecnumber/dpd -I../libdecnumber -I../../../pic32m-source/gcc/gcc/../libbacktrace  -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/include -imacros host-defs.h -o prefix.o -MT prefix.o -MMD -MP -MF ./.deps/prefix.TPo ../../../pic32m-source/gcc/gcc/prefix.c
+
+# Error:
+./../../pic32m-source/gcc/gcc/prefix.c
+../../../pic32m-source/gcc/gcc/system.h:737:30: error: expected identifier before string constant
+  737 | #define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__)
+      |                              ^~~~~~~~
+../../../pic32m-source/gcc/gcc/system.h:737:30: error: expected ',' or '...' before string constant
+../../../pic32m-source/gcc/gcc/system.h:737:30: error: expected identifier before string constant
+  737 | #define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__)
+      |                              ^~~~~~~~
+../../../pic32m-source/gcc/gcc/system.h:737:30: error: expected ',' or '...' before string constant
+make[1]: *** [Makefile:1112: prefix.o] Error 1
+make[1]: Leaving directory '/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/gcc'
+make: *** [Makefile:4290: all-gcc] Error 2
+
+# -------[NOPE!]--------
+# attempted fix in gcc/gcc/system.h:
+# - what inspired me to try this was seeing it here: https://github.com/gcc-mirror/gcc/blob/master/gcc/system.h#L851C75-L851C75
+
+# change FROM:
+#define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__)
+
+# TO:
+#define abort() (fancy_abort (__FILE__, __LINE__, __FUNCTION__))
+
+
+# Failed 21 min. later on a -j1 build:
+g++ -fno-PIE -c  -DPREFIX=\"/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/installed/opt\" -DBASEVER="\"8.3.1\"" -g -O2 -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE   -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H -I. -I. -I../../../pic32m-source/gcc/gcc -I../../../pic32m-source/gcc/gcc/. -I../../../pic32m-source/gcc/gcc/../include -I../../../pic32m-source/gcc/gcc/../libcpp/include -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/./gmp -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/gmp -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/./mpfr/src -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/mpfr/src -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/mpc/src  -I../../../pic32m-source/gcc/gcc/../libdecnumber -I../../../pic32m-source/gcc/gcc/../libdecnumber/dpd -I../libdecnumber -I../../../pic32m-source/gcc/gcc/../libbacktrace  -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/include -imacros host-defs.h -o prefix.o -MT prefix.o -MMD -MP -MF ./.deps/prefix.TPo ../../../pic32m-source/gcc/gcc/prefix.c
+../../../pic32m-source/gcc/gcc/system.h:737:31: error: expected identifier before string constant
+  737 | #define abort() (fancy_abort (__FILE__, __LINE__, __FUNCTION__))
+      |                               ^~~~~~~~
+../../../pic32m-source/gcc/gcc/system.h:737:31: error: expected ',' or '...' before string constant
+In file included from ../../../pic32m-source/gcc/gcc/prefix.c:67:
+../../../pic32m-source/gcc/gcc/system.h:737:17: warning: unnecessary parentheses in declaration of 'fancy_abort' [-Wparentheses]
+  737 | #define abort() (fancy_abort (__FILE__, __LINE__, __FUNCTION__))
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../pic32m-source/gcc/gcc/system.h:737:17: note: remove parentheses
+../../../pic32m-source/gcc/gcc/system.h:737:31: error: expected identifier before string constant
+  737 | #define abort() (fancy_abort (__FILE__, __LINE__, __FUNCTION__))
+      |                               ^~~~~~~~
+../../../pic32m-source/gcc/gcc/system.h:737:31: error: expected ',' or '...' before string constant
+../../../pic32m-source/gcc/gcc/system.h:737:17: warning: unnecessary parentheses in declaration of 'fancy_abort' [-Wparentheses]
+  737 | #define abort() (fancy_abort (__FILE__, __LINE__, __FUNCTION__))
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../pic32m-source/gcc/gcc/system.h:737:17: note: remove parentheses
+make[1]: *** [Makefile:1112: prefix.o] Error 1
+make[1]: Leaving directory '/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/gcc'
+make: *** [Makefile:4290: all-gcc] Error 2
+
+# total guess: try this instead (moved the left parenthesis):
+#define abort() fancy_abort ((__FILE__, __LINE__, __FUNCTION__))
+
+# FAILED IN 1 min. But, at least I get to see *where* it is failing from now! Failing on line 460 in fibonacci_heap.h may be due to `abort()` being called inside a C++ template class!
+g++ -fno-PIE -c   -g -O2 -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE   -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H -I. -I. -I../../../pic32m-source/gcc/gcc -I../../../pic32m-source/gcc/gcc/. -I../../../pic32m-source/gcc/gcc/../include -I../../../pic32m-source/gcc/gcc/../libcpp/include -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/./gmp -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/gmp -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/./mpfr/src -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/mpfr/src -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-source/gcc/mpc/src  -I../../../pic32m-source/gcc/gcc/../libdecnumber -I../../../pic32m-source/gcc/gcc/../libdecnumber/dpd -I../libdecnumber -I../../../pic32m-source/gcc/gcc/../libbacktrace  -I/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/opt/include -imacros host-defs.h -o bb-reorder.o -MT bb-reorder.o -MMD -MP -MF ./.deps/bb-reorder.TPo ../../../pic32m-source/gcc/gcc/bb-reorder.c
+../../../pic32m-source/gcc/gcc/fibonacci_heap.h: In instantiation of 'V* fibonacci_heap<K, V>::delete_node(fibonacci_node<K, V>*, bool) [with K = long int; V = basic_block_def]':
+../../../pic32m-source/gcc/gcc/bb-reorder.c:230:40:   required from here
+../../../pic32m-source/gcc/gcc/system.h:737:31: warning: left operand of comma operator has no effect [-Wunused-value]
+  737 | #define abort() fancy_abort ((__FILE__, __LINE__, __FUNCTION__))
+      |                               ^~~~~~~~
+../../../pic32m-source/gcc/gcc/fibonacci_heap.h:460:7: note: in expansion of macro 'abort'
+  460 |       abort ();
+      |       ^~~~~
+In file included from ../../../pic32m-source/gcc/gcc/bb-reorder.c:95:
+../../../pic32m-source/gcc/gcc/system.h:737:49: warning: right operand of comma operator has no effect [-Wunused-value]
+  737 | #define abort() fancy_abort ((__FILE__, __LINE__, __FUNCTION__))
+      |                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+../../../pic32m-source/gcc/gcc/fibonacci_heap.h:460:7: note: in expansion of macro 'abort'
+  460 |       abort ();
+      |       ^~~~~
+../../../pic32m-source/gcc/gcc/system.h:737:29: error: too few arguments to function 'void fancy_abort(const char*, int, const char*)'
+  737 | #define abort() fancy_abort ((__FILE__, __LINE__, __FUNCTION__))
+      |                 ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../pic32m-source/gcc/gcc/fibonacci_heap.h:460:7: note: in expansion of macro 'abort'
+  460 |       abort ();
+      |       ^~~~~
+../../../pic32m-source/gcc/gcc/system.h:735:13: note: declared here
+  735 | extern void fancy_abort (const char *, int, const char *)
+      |             ^~~~~~~~~~~
+make[1]: *** [Makefile:1112: bb-reorder.o] Error 1
+make[1]: Leaving directory '/c/Users/gabriel/GS/dev/Microchip_XC32_Compiler/xc32-v4.35-src/pic32m-build/gcc/gcc'
+make: *** [Makefile:4290: all-gcc] Error 2
+
+real    0m45.201s
+user    0m0.695s
+sys     0m2.956s
+Error: [gcc] failed to build!
+
+
+# A chat with GitHub Copilot reminds me: 
+# > In this example, __FUNCTION__ inside myMethod() expands to void MyClass<int, double>::myMethod(). The exact output may vary slightly depending on the compiler, but it will always include the class name with its template parameters and the method name.
+#
+# This puts a comma inside the macro, which may be causing the error? But, how could it? The whole thing is a string!
+
+
+# My question: https://stackoverflow.com/q/77435355/4561887
+
+# -------[WORKED]--------
+# Attempted fix: just comment out that line in `system.h`:
+#
+# from this on line 737:
+#define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__)
+#
+# to this:
+# - @Tim Roberts thinks it's a safe change: https://stackoverflow.com/questions/77435355/c-error-expected-or-before-string-constant-before-file-in#comment136515046_77435355
+/* #define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__) */
+
+# IT WORKED! GCC HAS NOW COMPLETED BUILDING!
+# It failed to copy the "resource" `xc32_device.info` file at the end, however, because I do not have the original XC32 v4.35 compiler installed. Install it. 
+
+# open Command Prompt, and this works!:
+C:\Users\gabriel\GS\dev\Microchip_XC32_Compiler\xc32-v4.35-src\installed\opt\bin\bin\pic32m-g++.exe --version
+# Sample output:
+pic32m-g++.exe (Microchip XC32 Compiler v4.35 custom) 8.3.1 Build date: Nov  6 2023
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
 
 ```
+
+
+# The final Windows fixes/manual file changes:
+
+1. 
+
+
+
+# TODO:
+
+1. [ ] Change this version string in the build script from `Microchip XC32 Compiler v4.35 custom` to `Microchip XC32 Compiler v4.35 unlicensed manual build` or something.
+1. [ ] clean up the build scripts in general, to make them nicer
+    [ ] Adjust any output dir names or whatever to be sensible, too, and/or to have the word `unlicensed` (probably) or perhaps `custom` in them too. 
+1. [ ] make all calls to the `configure` scripts use **relative** paths! I think this is just a good idea given the Windows MSYS2 situation which I describe here: https://stackoverflow.com/a/77435216/4561887
+1. [ ] add echo statements after each major step **succeeds** in the build script. 
+1. [ ] Don't try to copy the "resource" file at the end unless the compiler is installed. Just output a useful message to the user to install the compiler and copy the file manually instead. 
+1. [ ] clean up the script and test it from scratch for the M chip only. 
+1. [ ] fix the C chip's script
+1. [ ] add an "ALL" script that calls both of those scripts. 
+1. [ ] rename my build scripts to something more like this: 
+    ```
+    build_xc32_v4.35_pic32mx_Ubuntu.sh
+    build_xc32_v4.35_pic32cx_Ubuntu.sh
+    build_xc32_v4.35_ALL_Ubuntu.sh
+    ---
+    build_xc32_v4.35_pic32mx_Windows.sh
+    build_xc32_v4.35_pic32cx_Windows.sh
+    build_xc32_v4.35_ALL_Windows.sh
+    ---
+    ```
+    [ ] [OR: if you can make the same script build on BOTH Ubuntu and Windows, then remove the "Ubuntu" name from the end and just have those 3 files!]
+1. [ ] Test on Linux again, and save the binary build output and executables to a new repo, so others don't have to build from source:
+    [ ] Create 1 new build *output* sub-repo:
+        [ ] Microchip_XC32_Compiler_build
+        With 2 dirs:
+        [ ] 1. Ubuntu   # Ubuntu 22.04
+        [ ] 2. Windows  # Windows 11, using the MSYS2 ucrt64 environment
+1. [ ] go to the official XC32 compiler installed dir, and copy out the `xc32_device.info` file, and put it in the build output dir too. 
+    [ ] Also obtain the many `/opt/microchip/xc32/v4.35/bin/device_files` files too.
+    [ ] And get all of the linker scripts from places like this: `/opt/microchip/xc32/v4.35/pic32mx/lib/proc/32MX230F064D/p32MX230F064D_pic.ld`
+
