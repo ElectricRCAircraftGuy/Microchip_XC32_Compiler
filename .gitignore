@@ -5,6 +5,11 @@
 # User build dirs
 xc32-v4.35-src/pic32c-build
 xc32-v4.35-src/pic32m-build
+##########
+xc32-v4.35-src/pic32m-build_windows
+
+# VSCode directories which are automatically created when you load various directories into VSCode
+.vscode/
 
 # Installation dir
 xc32-v4.35-src/installed
