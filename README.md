@@ -1,3 +1,8 @@
+I am able to fully build the entire Microchip XC32 v4.35 GCC-based C and C++ compiler, and binutils, on both Linux Ubuntu _and_ Windows! It works!
+
+I need to update my scratch notes below is all.
+
+---
 
 _Tested on Linux Ubuntu 22.04 with `gcc --version` `gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0`_
 
