@@ -2,6 +2,10 @@ I am able to fully build the entire Microchip XC32 v4.35 GCC-based C and C++ com
 
 I need to update my scratch notes below is all.
 
+For building in Windows, I use the MSYS2 terminal. See my setup tutorial here: [Installing & setting up MSYS2 from scratch, including adding all 7 profiles to Windows Terminal](https://stackoverflow.com/a/77407282/4561887). 
+
+See also a ton of my notes in the [Issues](https://github.com/ElectricRCAircraftGuy/Microchip_XC32_Compiler/issues).
+
 ---
 
 _Tested on Linux Ubuntu 22.04 with `gcc --version` `gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0`_
